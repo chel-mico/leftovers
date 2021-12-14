@@ -6,21 +6,18 @@ import { Recipe } from "./Recipe";
 export class User {
 
   @PrimaryKey()
-  id!: string;
+  id!: number;
 
-  @Property()
+  @Property({ type: 'date' })
   createdAt = new Date();
 
-  @Property()
-  length!: number;
-
-  @Property({ onUpdate: () => new Date() })
+  @Property({ type: 'date', onUpdate: () => new Date() })
   updatedAt = new Date();
 
-  @Property()
+  @Property({ type: 'text' })
   name!: string;
 
-  @OneToOne()
+  @OneToOne("Fridge")
   fridge!: Fridge;
 
   @OneToMany(() => Recipe, recipe => recipe.author)

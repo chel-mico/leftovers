@@ -6,18 +6,18 @@ import { User } from "./User";
 export class Fridge {
 
   @PrimaryKey()
-  id!: string;
+  id!: number;
 
-  @Property()
+  @Property({ type: 'date' })
   createdAt = new Date();
 
-  @Property({ onUpdate: () => new Date() })
+  @Property({ type: 'date', onUpdate: () => new Date() })
   updatedAt = new Date();
 
-  @Property()
+  @Property({ type: 'text' })
   name!: string;
 
-  @OneToMany(() => FridgeIngredient, ingredient => ingredient.ingredient)
+  @OneToMany(() => FridgeIngredient, ingredient => ingredient.fridge)
   fridgeIngredients: Collection<FridgeIngredient> = new Collection<FridgeIngredient>(this);
 
   @OneToOne(() => User, user => user.fridge, {

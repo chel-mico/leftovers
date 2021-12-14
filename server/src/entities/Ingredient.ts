@@ -6,22 +6,16 @@ import { RecipeIngredient } from "./RecipeIngredient";
 export class Ingredient {
 
   @PrimaryKey()
-  id!: string;
+  id!: number;
 
-  @Property()
-  name!: string;
-
-  @Property()
+  @Property({ type: 'date' })
   createdAt = new Date();
 
-  @Property()
-  type!: string;
-
-  @Property()
-  measurement!: string; //cup, tbsp, tsp, g, kg, L, mL
-
-  @Property({ onUpdate: () => new Date() })
+  @Property({ type: 'date', onUpdate: () => new Date() })
   updatedAt = new Date();
+
+  @Property({ type: 'text' })
+  name!: string;
 
   @OneToMany(() => RecipeIngredient, ingredient => ingredient.ingredient)
   recipeIngredients: Collection<RecipeIngredient> = new Collection<RecipeIngredient>(this);

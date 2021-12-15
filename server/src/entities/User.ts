@@ -1,4 +1,4 @@
-import { Collection, Entity, ManyToMany, OneToMany, OneToOne, PrimaryKey, Property } from "@mikro-orm/core";
+import { Entity, ManyToMany, OneToMany, OneToOne, PrimaryKey, Property } from "@mikro-orm/core";
 import { Fridge } from "./Fridge";
 import { Recipe } from "./Recipe";
 
@@ -14,15 +14,21 @@ export class User {
   @Property({ type: 'date', onUpdate: () => new Date() })
   updatedAt = new Date();
 
-  @Property({ type: 'text' })
-  name!: string;
+  @Property({ type: 'text', unique: true })
+  username!: string;
 
-  @OneToOne("Fridge")
-  fridge!: Fridge;
+  @Property({ type: 'text', unique: true })
+  email!: string;
+
+  @Property({ type: 'text' })
+  password!: string;
+
+  @OneToOne(() => Fridge)
+  fridge?: Fridge | null;
 
   @OneToMany(() => Recipe, recipe => recipe.author)
-  authoredRecipes = new Collection<Recipe>(this)
+  authoredRecipes?: Recipe[];
 
   @ManyToMany(() => Recipe)
-  savedRecipes = new Collection<Recipe>(this)
+  savedRecipes?: Recipe[];
 }

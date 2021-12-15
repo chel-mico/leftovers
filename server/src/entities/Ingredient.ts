@@ -1,4 +1,4 @@
-import { Collection, Entity, OneToMany, PrimaryKey, Property } from "@mikro-orm/core";
+import { Entity, OneToMany, PrimaryKey, Property } from "@mikro-orm/core";
 import { FridgeIngredient } from "./FridgeIngredient";
 import { RecipeIngredient } from "./RecipeIngredient";
 
@@ -18,8 +18,8 @@ export class Ingredient {
   name!: string;
 
   @OneToMany(() => RecipeIngredient, ingredient => ingredient.ingredient)
-  recipeIngredients: Collection<RecipeIngredient> = new Collection<RecipeIngredient>(this);
+  recipeIngredients: RecipeIngredient[];
 
   @OneToMany(() => FridgeIngredient, ingredient => ingredient.ingredient)
-  fridgeIngredients: Collection<FridgeIngredient> = new Collection<FridgeIngredient>(this);
+  fridgeIngredients: FridgeIngredient[];
 }

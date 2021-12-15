@@ -1,4 +1,4 @@
-import { Collection, Entity, OneToMany, OneToOne, PrimaryKey, Property } from "@mikro-orm/core";
+import { Entity, OneToMany, OneToOne, PrimaryKey, Property } from "@mikro-orm/core";
 import { FridgeIngredient } from "./FridgeIngredient";
 import { User } from "./User";
 
@@ -14,14 +14,11 @@ export class Fridge {
   @Property({ type: 'date', onUpdate: () => new Date() })
   updatedAt = new Date();
 
-  @Property({ type: 'text' })
-  name!: string;
-
   @OneToMany(() => FridgeIngredient, ingredient => ingredient.fridge)
-  fridgeIngredients: Collection<FridgeIngredient> = new Collection<FridgeIngredient>(this);
+  fridgeIngredients: FridgeIngredient[];
 
   @OneToOne(() => User, user => user.fridge, {
     onDelete: "CASCADE",
   })
-  owner!: User;
+  owner: User;
 }

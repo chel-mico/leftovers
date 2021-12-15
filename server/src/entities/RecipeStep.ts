@@ -14,9 +14,6 @@ export class RecipeStep{
   updatedAt = new Date();
 
   @Property({ type: 'text' })
-  name!: string;
-
-  @Property({ type: 'text' })
   desc!: string;
   
   @Property()

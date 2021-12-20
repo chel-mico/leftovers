@@ -1,0 +1,12 @@
+{
+    "type": "postgres",
+    "username": "postgres",
+    "password": "iatwima4!",
+    "database": "leftovers",
+    "logging": true,
+    "entities": ["dist/entities/*.js"],
+    "migrations": ["dist/migrations/*.js"],
+    "cli": {
+        "migrationsDir": "src/migrations"
+    }
+}

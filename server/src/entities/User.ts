@@ -1,34 +1,36 @@
-import { Entity, ManyToMany, OneToMany, OneToOne, PrimaryKey, Property } from "@mikro-orm/core";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToMany, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Fridge } from "./Fridge";
 import { Recipe } from "./Recipe";
 
 @Entity()
 export class User {
 
-  @PrimaryKey()
-  id!: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-  @Property({ type: 'date' })
-  createdAt = new Date();
+  @Column({ type: 'text', unique: true })
+  username: string;
 
-  @Property({ type: 'date', onUpdate: () => new Date() })
-  updatedAt = new Date();
+  @Column({ type: 'text', unique: true })
+  email: string;
 
-  @Property({ type: 'text', unique: true })
-  username!: string;
+  @Column({ type: 'text' })
+  password: string;
 
-  @Property({ type: 'text', unique: true })
-  email!: string;
+  @CreateDateColumn()
+  createdAt: Date;
 
-  @Property({ type: 'text' })
-  password!: string;
+  @UpdateDateColumn()
+  updatedAt: Date;
 
-  @OneToOne(() => Fridge)
-  fridge?: Fridge | null;
+  @OneToOne(() => Fridge, fridge => fridge.owner)
+  @JoinColumn()
+  fridge: Fridge;
 
   @OneToMany(() => Recipe, recipe => recipe.author)
-  authoredRecipes?: Recipe[];
+  authoredRecipes: Recipe[];
 
-  @ManyToMany(() => Recipe)
-  savedRecipes?: Recipe[];
+  @ManyToMany(() => Recipe, recipe => recipe.saves)
+  savedRecipes: Recipe[]; 
+  
 }

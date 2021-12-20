@@ -1,32 +1,23 @@
-import { Entity, ManyToOne, PrimaryKey, Property } from "@mikro-orm/core";
 import { Ingredient } from "./Ingredient";
 import { Fridge } from "./Fridge";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class FridgeIngredient{
-  @PrimaryKey()
-  id!: number;
-
-  @Property({ type: 'date' })
-  createdAt = new Date();
-
-  @Property({ type: 'date', onUpdate: () => new Date() })
-  updatedAt = new Date();
-
-  @Property({ type: 'text' })
-  name!: string;
-
-  @Property({ type: 'text' })
-  measurement!: string; //cup, tbsp, tsp, g, kg, L, mL
-
-  @Property({ type: 'float' })
-  quantity!: number;
   
-  @ManyToOne(() => Ingredient)
-  ingredient!: Ingredient;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-  @ManyToOne(() => Fridge, {
-    onDelete: "CASCADE",
-  })
-  fridge!: Fridge;
+  @Column({ type: 'text' })
+  measurement: string; //cup, tbsp, tsp, g, kg, L, mL
+
+  @Column({ type: 'float' })
+  quantity: number;
+  
+  @ManyToOne(() => Ingredient, ingredient => ingredient.fridgeIngredients)
+  ingredient: Ingredient;
+
+  @ManyToOne(() => Fridge, fridge => fridge.fridgeIngredients)
+  fridge: Fridge;
+  
 }

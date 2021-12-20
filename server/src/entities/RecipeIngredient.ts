@@ -1,29 +1,23 @@
-import { Entity, ManyToOne, PrimaryKey, Property } from "@mikro-orm/core";
+import { Entity, PrimaryGeneratedColumn, ManyToOne, Column } from "typeorm";
 import { Ingredient } from "./Ingredient";
 import { Recipe } from "./Recipe";
 
 @Entity()
 export class RecipeIngredient{
-  @PrimaryKey()
-  id!: number;
+  
+  @PrimaryGeneratedColumn()
+  id: number;
 
-  @Property({ type: 'date' })
-  createdAt = new Date();
+  @Column({ type: 'text' })
+  name: string; 
+  
+  @Column()
+  quantity: number
 
-  @Property({ type: 'date', onUpdate: () => new Date() })
-  updatedAt = new Date();
+  @ManyToOne(() => Ingredient, ingredient => ingredient.recipeIngredients)
+  ingredient: Ingredient;
 
-  @Property({ type: 'text' })
-  name!: string; 
-
-  @ManyToOne(() => Ingredient)
-  ingredient!: Ingredient;
-
-  @ManyToOne(() => Recipe, {
-    onDelete: "CASCADE",
-  })
-  recipe!: Recipe;
-
-  @Property()
-  quantity!: number
+  @ManyToOne(() => Recipe, recipe => recipe.recipeIngredients)
+  recipe: Recipe;
+  
 }

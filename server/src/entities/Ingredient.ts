@@ -1,25 +1,20 @@
-import { Entity, OneToMany, PrimaryKey, Property } from "@mikro-orm/core";
+import { Entity, PrimaryGeneratedColumn, OneToMany, Column } from "typeorm";
 import { FridgeIngredient } from "./FridgeIngredient";
 import { RecipeIngredient } from "./RecipeIngredient";
 
 @Entity()
 export class Ingredient {
 
-  @PrimaryKey()
-  id!: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-  @Property({ type: 'date' })
-  createdAt = new Date();
+  @Column({ type: 'text' })
+  name: string;
 
-  @Property({ type: 'date', onUpdate: () => new Date() })
-  updatedAt = new Date();
-
-  @Property({ type: 'text' })
-  name!: string;
-
-  @OneToMany(() => RecipeIngredient, ingredient => ingredient.ingredient)
+  @OneToMany(() => RecipeIngredient, recipeIngredients => recipeIngredients.ingredient)
   recipeIngredients: RecipeIngredient[];
 
-  @OneToMany(() => FridgeIngredient, ingredient => ingredient.ingredient)
+  @OneToMany(() => FridgeIngredient, fridgeIngredients => fridgeIngredients.ingredient)
   fridgeIngredients: FridgeIngredient[];
+  
 }

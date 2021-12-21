@@ -2,7 +2,8 @@ import { __prod__ } from "./constants";
 import { createConnection, getConnectionOptions } from "typeorm";
 import express from 'express';
 import { graphqlHTTP } from 'express-graphql';
-import { buildSchema, Root } from 'type-graphql';
+import { buildSchema } from 'type-graphql';
+import { IngredientResolver } from "./resolvers/ingredient";
 
 
 const main = async () => {
@@ -13,18 +14,23 @@ const main = async () => {
     });
 
     const app = express();
-    app.use('/graphql', graphqlHTTP({
+    app.use('/graphiql', graphqlHTTP({
         schema: await buildSchema({
-            resolvers: ["dist/src/resolvers/*.js"],
+            resolvers: [
+                IngredientResolver
+            ],
             validate: false
         }),
-        rootValue: Root,
+        //rootValue: Root,
         graphiql: true,
+        context: () => ({ em: connection.manager })
     }));
     app.listen(4000, () => {
         console.log('server started on localhost:4000');
     });
 };
 
-main();
+main().catch((err) => {
+    console.error(err);
+});
 

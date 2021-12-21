@@ -1,16 +1,16 @@
 import { Field, Int, ObjectType } from "type-graphql";
-import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, Column, BaseEntity } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, ManyToOne, Column, BaseEntity } from "typeorm";
 import { Recipe } from "./Recipe";
 
 @ObjectType()
 @Entity()
 export class RecipeStep extends BaseEntity {
 
-  @Field(() => Int)
+  @Field()
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Field(() => String)
+  @Field()
   @Column({ type: 'text' })
   desc!: string;
   
@@ -18,15 +18,10 @@ export class RecipeStep extends BaseEntity {
   @Column({ type: 'int' })
   stepNum!: number;
 
-  @Field(() => String)
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @Field(() => String)
-  @UpdateDateColumn()
-  updatedAt: Date;
-
   @Field()
+  @Column()
+  recipeID: number;
+  
   @ManyToOne(() => Recipe, recipe => recipe.steps)
   recipe: Recipe;
   

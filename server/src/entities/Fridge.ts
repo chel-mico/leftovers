@@ -1,5 +1,5 @@
-import { Field, Int, ObjectType } from "type-graphql";
-import { BaseEntity, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Field, ObjectType } from "type-graphql";
+import { BaseEntity, Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { FridgeIngredient } from "./FridgeIngredient";
 import { User } from "./User";
 
@@ -7,15 +7,17 @@ import { User } from "./User";
 @Entity()
 export class Fridge extends BaseEntity {
   
-  @Field(() => Int)
+  @Field()
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Field()
   @OneToMany(() => FridgeIngredient, fridgeIngredients => fridgeIngredients.fridge)
   fridgeIngredients: FridgeIngredient[];
 
   @Field()
+  @Column()
+  ownerID: number;
+  
   @OneToOne(() => User, owner => owner.fridge)
   owner!: User;
   

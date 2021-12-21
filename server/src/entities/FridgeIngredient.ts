@@ -1,12 +1,12 @@
 import { Ingredient } from "./Ingredient";
 import { Fridge } from "./Fridge";
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
-export class FridgeIngredient{
+export class FridgeIngredient extends BaseEntity {
   
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column({ type: 'text' })
   measurement: string; //cup, tbsp, tsp, g, kg, L, mL
@@ -15,9 +15,9 @@ export class FridgeIngredient{
   quantity: number;
   
   @ManyToOne(() => Ingredient, ingredient => ingredient.fridgeIngredients)
-  ingredient: Ingredient;
+  ingredient!: Ingredient;
 
   @ManyToOne(() => Fridge, fridge => fridge.fridgeIngredients)
-  fridge: Fridge;
+  fridge!: Fridge;
   
 }

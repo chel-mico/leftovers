@@ -1,21 +1,21 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToMany, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToMany, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Fridge } from "./Fridge";
 import { Recipe } from "./Recipe";
 
 @Entity()
-export class User {
+export class User extends BaseEntity {
 
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column({ type: 'text', unique: true })
-  username: string;
+  username!: string;
 
   @Column({ type: 'text', unique: true })
-  email: string;
+  email!: string;
 
   @Column({ type: 'text' })
-  password: string;
+  password!: string;
 
   @CreateDateColumn()
   createdAt: Date;

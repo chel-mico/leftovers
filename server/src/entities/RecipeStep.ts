@@ -1,17 +1,17 @@
-import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, Column, BaseEntity } from "typeorm";
 import { Recipe } from "./Recipe";
 
 @Entity()
-export class RecipeStep{
+export class RecipeStep extends BaseEntity {
 
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column({ type: 'text' })
-  desc: string;
+  desc!: string;
   
-  @Column()
-  stepNum: number;
+  @Column({ type: 'int' })
+  stepNum!: number;
 
   @CreateDateColumn()
   createdAt: Date;

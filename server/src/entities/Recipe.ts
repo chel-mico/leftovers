@@ -1,18 +1,18 @@
 import { User } from "./User";
 import { RecipeIngredient } from "./RecipeIngredient";
 import { RecipeStep } from "./RecipeStep";
-import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, OneToMany, Column, ManyToMany } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, OneToMany, Column, ManyToMany, BaseEntity } from "typeorm";
 
 @Entity()
-export class Recipe{
+export class Recipe extends BaseEntity {
 
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column({ type: 'text' })
-  title: string;
+  title!: string;
 
-  @Column()
+  @Column({ type: 'int', default: 0 })
   saves: number;
 
   @CreateDateColumn()

@@ -1,7 +1,6 @@
 
 import { Ingredient } from "../entities/Ingredient";
-import { Context } from "src/types";
-import { Arg, Ctx, Field, InputType, Int, Mutation, Query, Resolver } from "type-graphql";
+import { Arg, Field, InputType, Int, Mutation, Query, Resolver } from "type-graphql";
 
 @InputType()
 class IngredientInput {

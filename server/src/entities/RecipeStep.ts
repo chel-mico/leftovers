@@ -7,9 +7,9 @@ import { Recipe } from "./Recipe";
 export class RecipeStep extends BaseEntity {
 
   @Field()
-  @PrimaryGeneratedColumn()
-  id!: number;
-
+  @PrimaryGeneratedColumn("uuid")
+  id!: string;
+  
   @Field()
   @Column({ type: 'text' })
   desc!: string;

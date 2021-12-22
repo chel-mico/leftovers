@@ -1,16 +1,16 @@
 import { User } from "./User";
 import { RecipeIngredient } from "./RecipeIngredient";
 import { RecipeStep } from "./RecipeStep";
-import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, OneToMany, Column, ManyToMany, BaseEntity } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, OneToMany, Column, BaseEntity } from "typeorm";
 import { Field, Int } from "type-graphql";
 
 @Entity()
 export class Recipe extends BaseEntity {
 
   @Field()
-  @PrimaryGeneratedColumn()
-  id!: number;
-
+  @PrimaryGeneratedColumn("uuid")
+  id!: string;
+  
   @Field()
   @Column({ type: 'text' })
   title!: string;
@@ -31,9 +31,6 @@ export class Recipe extends BaseEntity {
 
   @OneToMany(() => RecipeStep, steps => steps.recipe)
   steps: RecipeStep[];
-
-  @ManyToMany(() => User, userSaves => userSaves.savedRecipes)
-  userSaves: User[];
 
   @Field(() => String)
   @CreateDateColumn()

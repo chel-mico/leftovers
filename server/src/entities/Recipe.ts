@@ -22,7 +22,7 @@ export class Recipe extends BaseEntity {
   @Field()
   @Column()
   authorID: number;
-
+  
   @ManyToOne(() => User, author => author.authoredRecipes)
   author: User;
 

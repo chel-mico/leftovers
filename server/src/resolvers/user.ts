@@ -1,24 +1,11 @@
 import { User } from "../entities/User";
 import { Arg, InputType, Mutation, Resolver, Field, Query, ObjectType } from "type-graphql";
 import argon2 from 'argon2';
-import { constants } from "../constants";
 
 @InputType()
 class Login {
     @Field(() => String)
-    email: string = "";
-    @Field(() => String)
     username: string = "";
-    @Field()
-    password: string;
-}
-
-@InputType()
-class Register {
-    @Field()
-    email: string;
-    @Field()
-    username: string;
     @Field()
     password: string;
 }
@@ -41,13 +28,19 @@ class UserResponse {
 
 @Resolver()
 export class UserResolver {
-    @Mutation(() => User)
+    @Mutation(() => UserResponse)
     async register (
-        @Arg('input', () => Register) input: Register,
+        @Arg('input', () => Login) input: Login,
     ): Promise<UserResponse> {
+        if (input.username.length < 3 || input.username.length > 32) {
+            return {errors: [{
+                field: 'username',
+                message: "Usernames must be between 3 and 32 characters long!"
+            }]}
+        }
+
         const user = await User.findOne({where: [
-            {username: input.username},
-            {email: input.email}
+            {username: input.username}
         ]});
         if (user) {
             return {errors: [{
@@ -55,12 +48,7 @@ export class UserResolver {
                 message: "User already exists!"
             }]}
         }
-        if (!input.email.match(constants.emailCheck)) {
-            return {errors: [{
-                field: 'email',
-                message: "Not a valid email!"
-            }]}
-        }
+
         input.password = await argon2.hash(input.password);
         const newUser = await User.create({
             ...input
@@ -71,17 +59,23 @@ export class UserResolver {
     }
 
     @Mutation(() => UserResponse)
-    async loginUserPass (
+    async login (
         @Arg('input', () => Login) input: Login,
     ): Promise<UserResponse> {
+        if (input.username == "") {
+            return {errors: [{
+                field: 'username',
+                message: "You must enter a username!"
+            }]}
+        }
+
         const user = await User.findOne({where: [
-            {username: input.username},
-            {email: input.email}
+            {username: input.username}
         ]});
         if (!user) {
             return {errors: [{
                 field: 'username',
-                message: "Username doesn't exist!"
+                message: "User doesn't exist!"
             }]}
         }
 

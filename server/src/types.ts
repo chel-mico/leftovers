@@ -1,5 +1,9 @@
 import { EntityManager } from "typeorm";
+import { Request, Response } from "express";
+import { RedisClientType } from "redis";
 
 export type Context = {
-    em: EntityManager
+    req: Request;
+    res: Response;
+    redis: RedisClientType;
 }

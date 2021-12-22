@@ -1,5 +1,5 @@
 import { Field, ObjectType } from "type-graphql";
-import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, ManyToMany, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Fridge } from "./Fridge";
 import { Recipe } from "./Recipe";
 
@@ -8,8 +8,8 @@ import { Recipe } from "./Recipe";
 export class User extends BaseEntity {
 
   @Field()
-  @PrimaryGeneratedColumn()
-  id!: number;
+  @PrimaryGeneratedColumn("uuid")
+  id!: string;
 
   @Field()
   @Column({ type: 'text', unique: true })
@@ -20,6 +20,9 @@ export class User extends BaseEntity {
   email!: string;
 
   @Field()
+  @Column({ type: 'bool', default: false })
+  emailVerified: boolean
+
   @Column({ type: 'text' })
   password!: string;
 
@@ -30,8 +33,9 @@ export class User extends BaseEntity {
   @OneToMany(() => Recipe, recipe => recipe.author)
   authoredRecipes: Recipe[];
 
-  @ManyToMany(() => Recipe, recipe => recipe.saves)
-  savedRecipes: Recipe[];
+  @Field(() => [String])
+  @Column("text", {array: true, default: []})
+  savedRecipes: string[];
 
   @Field(() => String)
   @CreateDateColumn()

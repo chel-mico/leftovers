@@ -8,9 +8,9 @@ import { Field, Float, ObjectType } from "type-graphql";
 export class FridgeIngredient extends BaseEntity {
   
   @Field()
-  @PrimaryGeneratedColumn()
-  id!: number;
-
+  @PrimaryGeneratedColumn("uuid")
+  id!: string;
+  
   @Field()
   @Column({ type: 'text' })
   measurement: string; //cup, tbsp, tsp, g, kg, L, mL

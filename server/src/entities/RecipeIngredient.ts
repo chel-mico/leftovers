@@ -8,9 +8,9 @@ import { Recipe } from "./Recipe";
 export class RecipeIngredient extends BaseEntity {
   
   @Field()
-  @PrimaryGeneratedColumn()
-  id!: number;
-
+  @PrimaryGeneratedColumn("uuid")
+  id!: string;
+  
   @Field()
   @Column({ type: 'text' })
   name!: string; 

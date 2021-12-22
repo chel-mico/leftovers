@@ -8,9 +8,9 @@ import { User } from "./User";
 export class Fridge extends BaseEntity {
   
   @Field()
-  @PrimaryGeneratedColumn()
-  id!: number;
-
+  @PrimaryGeneratedColumn("uuid")
+  id!: string;
+  
   @OneToMany(() => FridgeIngredient, fridgeIngredients => fridgeIngredients.fridge)
   fridgeIngredients: FridgeIngredient[];
 

@@ -6,10 +6,11 @@ import { RecipeIngredient } from "./RecipeIngredient";
 @ObjectType()
 @Entity()
 export class Ingredient extends BaseEntity {
-  @Field()
-  @PrimaryGeneratedColumn()
-  id!: number;
 
+  @Field()
+  @PrimaryGeneratedColumn("uuid")
+  id: string;
+  
   @Field()
   @Column({ type: 'text' })
   name!: string;

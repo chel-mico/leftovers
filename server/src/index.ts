@@ -1,13 +1,13 @@
 import { createConnection, getConnectionOptions } from "typeorm";
 import express from 'express';
-import { graphqlHTTP } from 'express-graphql';
 import { buildSchema } from 'type-graphql';
 import { IngredientResolver } from "./resolvers/ingredient";
 import { UserResolver } from "./resolvers/user";
-import redis from 'redis';
 import session from 'express-session';
-import connectRedis from 'connect-redis';
 import { constants } from "./constants";
+import MongoStore from "connect-mongo";
+import { MongoClient } from "mongodb"
+import { ApolloServer } from "apollo-server-express";
 
 const main = async () => {
     const options = await getConnectionOptions();
@@ -15,19 +15,18 @@ const main = async () => {
     await connection.runMigrations({
         transaction: "none"
     });
-    //await connection.query(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`)
 
     const app = express();
 
-    const RedisStore = connectRedis(session);
-    const redisClient = redis.createClient();
+    const mongo = await MongoClient.connect(constants.__cache__);
 
     app.use(
         session({
             name: 'qid',
-            store: new RedisStore({ 
-                client: redisClient,
-                disableTouch: true
+            store: new MongoStore({ 
+                client: mongo,
+                dbName: "leftovers-cache",
+                autoRemove: 'disabled'
             }),
             cookie: {
                 maxAge: 1000 * 60 * 60 * 24 * 7, //one week
@@ -40,8 +39,9 @@ const main = async () => {
         })
     )
 
-    app.use('/graphiql', graphqlHTTP(async (req, res) => {
-        return {
+    let server = null;
+    async function startServer() {
+        server = new ApolloServer({
             schema: await buildSchema({
                 resolvers: [
                     IngredientResolver,
@@ -49,16 +49,23 @@ const main = async () => {
                 ],
                 validate: true
             }),
-            context: { 
+            context: ({req, res}) => ({ 
                 req,
                 res,
-                redis
-            },
-            graphiql: true
-        }
-    }));
-    app.listen(4000, () => {
-        console.log('server started on localhost:4000');
+                mongo
+            })
+        });
+        await server.start();
+        server.applyMiddleware({ app });
+    }
+    startServer();
+
+    app.get("/rest", function (req, res) {
+        res.json({ data: "api working" });
+    });
+
+    app.listen(constants.__port__, () => {
+        console.log(`server started at port ${constants.__port__}`);
     });
 };
 

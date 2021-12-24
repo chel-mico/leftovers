@@ -1,6 +1,7 @@
 import { User } from "../entities/User";
-import { Arg, InputType, Mutation, Resolver, Field, Query, ObjectType } from "type-graphql";
+import { Arg, InputType, Mutation, Resolver, Field, Query, ObjectType, Ctx } from "type-graphql";
 import argon2 from 'argon2';
+import { Context } from "src/types";
 
 @InputType()
 class Login {
@@ -45,7 +46,7 @@ export class UserResolver {
         if (user) {
             return {errors: [{
                 field: 'username',
-                message: "User already exists!"
+                message: "Username already taken!"
             }]}
         }
 
@@ -61,6 +62,7 @@ export class UserResolver {
     @Mutation(() => UserResponse)
     async login (
         @Arg('input', () => Login) input: Login,
+        @Ctx() { req }: Context
     ): Promise<UserResponse> {
         if (input.username == "") {
             return {errors: [{
@@ -86,6 +88,8 @@ export class UserResolver {
                 message: "Password is incorrect!"
             }]}
         }
+
+        req.session.userId = user.id
 
         return {
             user: user

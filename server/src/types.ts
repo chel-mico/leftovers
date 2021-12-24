@@ -1,9 +1,8 @@
-import { EntityManager } from "typeorm";
 import { Request, Response } from "express";
-import { RedisClientType } from "redis";
+import { MongoClient } from "mongodb";
 
 export type Context = {
-    req: Request;
+    req: Request & { session: Express.Session };
     res: Response;
-    redis: RedisClientType;
+    mongo: MongoClient;
 }

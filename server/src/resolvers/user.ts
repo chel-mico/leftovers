@@ -97,16 +97,6 @@ export class UserResolver {
     }
 
     @Query(() => User)
-<<<<<<< Updated upstream
-    userByID (
-        @Arg('id', () => String) id: string,
-    ): Promise<User | undefined> {
-        return User.findOne(id);
-    }
-
-    @Query(() => User)
-=======
->>>>>>> Stashed changes
     userByName (
         @Arg('name', () => String) name: string,
     ): Promise<User | undefined> {

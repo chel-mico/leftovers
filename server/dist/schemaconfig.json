@@ -1,0 +1,6 @@
+{
+    "schema": {
+        "resolvers": ["dist/src/resolvers/*.js"],
+        "validate": "true"
+    }
+}

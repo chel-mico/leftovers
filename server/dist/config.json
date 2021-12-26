@@ -1,0 +1,6 @@
+{
+    "NODE_ENV": "production",
+    "SECRET": "0rtCprHm4nyCFpN5yngeIdzuP7GJ5ZUP",
+    "CACHE": "mongodb+srv://teddy:iatwima4@leftovers-cache.retcc.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+    "PORT": "4000"
+}

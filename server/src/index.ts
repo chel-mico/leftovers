@@ -60,10 +60,6 @@ const main = async () => {
     }
     startServer();
 
-    app.get("/rest", function (req, res) {
-        res.json({ data: "api working" });
-    });
-
     app.listen(constants.__port__, () => {
         console.log(`server started at port ${constants.__port__}`);
     });

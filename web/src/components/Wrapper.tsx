@@ -1,15 +1,13 @@
-import { ThemeContext } from '@emotion/react';
 import { Theme } from '@mui/material';
 import { Box } from '@mui/system';
-import React, { Component } from 'react'
+import { FC } from 'react'
 
 interface WrapperProps {
     theme?: Theme
 }
 
-const Wrapper: React.FC<WrapperProps> = ({ 
-    children,
-    theme 
+const Wrapper: FC<WrapperProps> = ({ 
+    children
 }) => {
     return (
         <Box
@@ -23,10 +21,10 @@ const Wrapper: React.FC<WrapperProps> = ({
                 sx={{
                     margin: 0,
                     position: "absolute",
-                    top: "200%",
+                    top: "125%",
                     left: "50%",
                     msTransform: "translate(-50%, -50%)",
-                    transform: "translate(-50%, -50%)",
+                    transform: "translate(-50%, -50%)"
                 }}
             >
                 {children}

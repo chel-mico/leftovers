@@ -1,25 +1,26 @@
-import { createTheme, CssBaseline } from '@mui/material'
-import { ThemeProvider } from '@mui/styles'
+import { createTheme, CssBaseline, ThemeProvider } from '@mui/material'
 import type { AppProps } from 'next/app'
 
 const theme = createTheme({
   palette: {
     background: {
-      default: "#FAE7C6",
-      paper: '#FFD68B',
+      default: "#FCE9D9",
+      paper: '#FADEC6',
     },
     text: {
-      primary: '#DD2B24',
-      secondary: '#80100E',
-    },
-    action: {
-      active: '#FB7351',
+      primary: '#FFB48C',
+      secondary: '#FC8460',
     },
     primary: {
-      main: "#DD2B24"
+      main: "#F46352",
+      dark: "#E83835"
     },
     secondary: {
-      main: "#DD2B24"
+      main: "#C21D28",
+      dark: "#AA1924"
+    },
+    info: {
+      main: "#FAE7C6"
     }
   }
 })

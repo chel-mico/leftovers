@@ -1,14 +1,29 @@
-import { Button, TextField, Theme } from '@mui/material';
-import { useTheme } from '@mui/styles';
-import { Form, Formik, useFormik } from 'formik';
-import React, { Component } from 'react'
+import { LoadingButton } from '@mui/lab';
+import { styled, TextField, Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import { useFormik } from 'formik';
+import { FC } from 'react'
 import Wrapper from '../components/Wrapper';
 
 interface registerProps {
-    theme: Theme
+    
 }
 
-const Register: React.FC<registerProps> = ({}) => {
+const useStyles = makeStyles<Theme>((theme: Theme) => ({
+    root: {
+        "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+        borderColor: theme.palette.primary.main
+        },
+        "&:hover .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+        borderColor: theme.palette.primary.dark
+        },
+        "&.MuiLoadingButton-loading": {
+        backgroundColor: theme.palette.secondary.main
+        }
+    }
+}))
+
+const Register: FC<registerProps> = ({}) => {
     const formik = useFormik({
         initialValues: {
             username: "", 
@@ -19,11 +34,17 @@ const Register: React.FC<registerProps> = ({}) => {
         }
     })
 
+    const classes = useStyles();
+
     return (
         <Wrapper>
             <form onSubmit={formik.handleSubmit}>
                 <TextField
                     fullWidth
+                    sx={{
+                        backgroundColor: "background"
+                    }}
+                    className={classes.root}
                     id="username"
                     name="username"
                     label="Username"
@@ -34,6 +55,11 @@ const Register: React.FC<registerProps> = ({}) => {
                 />
                 <TextField
                     fullWidth
+                    sx={{
+                        backgroundColor: "background",
+                        top: "10px"
+                    }}
+                    className={classes.root}
                     id="password"
                     name="password"
                     label="Password"
@@ -43,14 +69,18 @@ const Register: React.FC<registerProps> = ({}) => {
                     error={formik.touched.password && Boolean(formik.errors.password)}
                     helperText={formik.touched.password && formik.errors.password}
                 />
-                <Button
-                    color="primary"
+                <LoadingButton
+                    sx={{
+                        top: "20px"
+                    }}
+                    className={classes.root}
                     variant="contained" 
                     fullWidth 
                     type="submit"
+                    loading={formik.isSubmitting}
                 >
                     Submit
-                </Button>
+                </LoadingButton>
             </form>
         </Wrapper>
     );

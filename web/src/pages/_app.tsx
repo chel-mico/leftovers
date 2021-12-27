@@ -1,3 +1,4 @@
+import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client'
 import { createTheme, CssBaseline, ThemeProvider } from '@mui/material'
 import type { AppProps } from 'next/app'
 
@@ -8,7 +9,7 @@ const theme = createTheme({
       paper: '#FADEC6',
     },
     text: {
-      primary: '#FFB48C',
+      primary: '#FC8460',
       secondary: '#FC8460',
     },
     primary: {
@@ -25,12 +26,20 @@ const theme = createTheme({
   }
 })
 
+const client = new ApolloClient({
+  uri: 'http://localhost:4000/graphql',
+  credentials: "include",
+  cache: new InMemoryCache()
+});
+
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Component {...pageProps} />
-    </ThemeProvider>
+    <ApolloProvider client={client}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Component {...pageProps} />
+      </ThemeProvider>
+    </ApolloProvider>
   )
 }
 

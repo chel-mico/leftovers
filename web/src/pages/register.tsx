@@ -1,9 +1,13 @@
 import { LoadingButton } from '@mui/lab';
-import { styled, TextField, Theme } from '@mui/material';
+import { TextField, Theme } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { useFormik } from 'formik';
 import { FC } from 'react'
 import Wrapper from '../components/Wrapper';
+import * as yup from 'yup';
+import { useRegisterMutation } from '../generated/graphql';
+import { toErrorMap } from '../utils/toErrorMap';
+import { useRouter } from 'next/router';
 
 interface registerProps {
     
@@ -19,18 +23,48 @@ const useStyles = makeStyles<Theme>((theme: Theme) => ({
         },
         "&.MuiLoadingButton-loading": {
         backgroundColor: theme.palette.secondary.main
+        },
+        "&:hover.MuiLoadingButton-root": {
+        boxShadow: "none"
         }
     }
 }))
 
+const validationSchema = yup.object({
+    username: yup.string().required(),
+    password: yup.string().min(8).required()
+})
+
 const Register: FC<registerProps> = ({}) => {
+    const [register, { data }] = useRegisterMutation();
+    
+    const router = useRouter()
+
     const formik = useFormik({
         initialValues: {
             username: "", 
             password: ""
         },
-        onSubmit: (values) => {
-            console.log(values);
+        validationSchema: validationSchema,
+        onSubmit: async (values, { setErrors }) => {
+            const response = await register({
+                variables: values,
+                // update: (cache, { data }) => {
+                //     cache.writeQuery<MeQuery>({
+                //         query: MeDocument,
+                //         data: {
+                //         __typename: "Query",
+                //         me: data?.register.user,
+                //         },
+                //     });
+                // },
+            });
+            if (response.data?.register.errors) {
+                setErrors(toErrorMap(response.data.register.errors));
+            } 
+            else if (response.data?.register.user) { //everything worked
+                router.push("/");
+            }
         }
     })
 
@@ -71,7 +105,8 @@ const Register: FC<registerProps> = ({}) => {
                 />
                 <LoadingButton
                     sx={{
-                        top: "20px"
+                        top: "20px",
+                        boxShadow: "none"
                     }}
                     className={classes.root}
                     variant="contained" 

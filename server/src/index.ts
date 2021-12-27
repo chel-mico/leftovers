@@ -8,6 +8,7 @@ import { constants } from "./constants";
 import MongoStore from "connect-mongo";
 import { MongoClient } from "mongodb"
 import { ApolloServer } from "apollo-server-express";
+import cors from 'cors';
 
 const main = async () => {
     const options = await getConnectionOptions();
@@ -20,13 +21,25 @@ const main = async () => {
 
     const mongo = await MongoClient.connect(constants.__cache__);
 
+    const whitelist = ['http://localhost:3000', 'https://studio.apollographql.com'] //studio.apollographql.com lets me test the API locally
+
+    app.use(
+        cors({
+            origin: whitelist,
+            credentials: true
+        })
+    );
+
     app.use(
         session({
             name: 'qid',
-            store: new MongoStore({ 
-                client: mongo,
+            store: MongoStore.create({ 
+                mongoUrl: constants.__cache__,
                 dbName: "leftovers-cache",
-                autoRemove: 'disabled'
+                autoRemove: 'disabled',
+                crypto: {
+                    secret: constants.__secret__
+                }
             }),
             cookie: {
                 maxAge: 1000 * 60 * 60 * 24 * 7, //one week
@@ -34,31 +47,31 @@ const main = async () => {
                 sameSite: 'lax', //csrf
                 secure: constants.__prod__ //works only in https
             },
-            secret: constants.__secret__, //remember to set a secret in .env
-            resave: false
+            secret: constants.__secret__,
+            resave: false,
+            saveUninitialized: true
         })
     )
 
-    let server = null;
-    async function startServer() {
-        server = new ApolloServer({
-            schema: await buildSchema({
-                resolvers: [
-                    IngredientResolver,
-                    UserResolver
-                ],
-                validate: true
-            }),
-            context: ({req, res}) => ({ 
-                req,
-                res,
-                mongo
-            })
-        });
-        await server.start();
-        server.applyMiddleware({ app });
-    }
-    startServer();
+    const server = new ApolloServer({
+        schema: await buildSchema({
+            resolvers: [
+                IngredientResolver,
+                UserResolver
+            ],
+            validate: true
+        }),
+        context: ({req, res}) => ({ 
+            req,
+            res,
+            mongo
+        })
+    });
+    await server.start();
+    server.applyMiddleware({ 
+        app,
+        cors: false
+    });
 
     app.listen(constants.__port__, () => {
         console.log(`server started at port ${constants.__port__}`);

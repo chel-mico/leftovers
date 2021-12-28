@@ -102,4 +102,14 @@ export class UserResolver {
     ): Promise<User | undefined> {
         return User.findOne({username: name});
     }
+
+    @Query(() => User)
+    me (
+        @Ctx() { req }: Context,
+    ): Promise<User> | null {
+        if (!req.session.userId) {
+            return null;
+        }
+        return User.findOne(req.session.userId);
+    }
 }

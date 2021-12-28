@@ -1,16 +1,9 @@
-import { Button } from '@mui/material'
 import type { NextPage } from 'next'
+import NavBar from '../components/NavBar'
 
 const Home: NextPage = () => {
   return (
-    <Button
-      color="primary"
-      variant="contained" 
-      fullWidth 
-      type="submit"
-    >
-        Submit
-    </Button>
+    <NavBar />
   )
 }
 

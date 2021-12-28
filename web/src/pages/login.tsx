@@ -5,11 +5,11 @@ import { useFormik } from 'formik';
 import { FC } from 'react'
 import Wrapper from '../components/Wrapper';
 import * as yup from 'yup';
-import { useRegisterMutation } from '../generated/graphql';
+import { useLoginMutation } from '../generated/graphql';
 import { toErrorMap } from '../utils/toErrorMap';
 import { useRouter } from 'next/router';
 
-interface registerProps {
+interface loginProps {
     
 }
 
@@ -32,11 +32,11 @@ const useStyles = makeStyles<Theme>((theme: Theme) => ({
 
 const validationSchema = yup.object({
     username: yup.string().required(),
-    password: yup.string().min(8).required()
+    password: yup.string().required()
 })
 
-const Register: FC<registerProps> = ({}) => {
-    const [register, { data }] = useRegisterMutation();
+const Login: FC<loginProps> = ({}) => {
+    const [login] = useLoginMutation();
     
     const router = useRouter()
 
@@ -47,7 +47,7 @@ const Register: FC<registerProps> = ({}) => {
         },
         validationSchema: validationSchema,
         onSubmit: async (values, { setErrors }) => {
-            const response = await register({
+            const response = await login({
                 variables: values,
                 // update: (cache, { data }) => {
                 //     cache.writeQuery<MeQuery>({
@@ -59,10 +59,10 @@ const Register: FC<registerProps> = ({}) => {
                 //     });
                 // },
             });
-            if (response.data?.register.errors) {
-                setErrors(toErrorMap(response.data.register.errors));
+            if (response.data?.login.errors) {
+                setErrors(toErrorMap(response.data.login.errors));
             } 
-            else if (response.data?.register.user) { //everything worked
+            else if (response.data?.login.user) { //everything worked
                 router.push("/");
             }
         }
@@ -114,11 +114,11 @@ const Register: FC<registerProps> = ({}) => {
                     type="submit"
                     loading={formik.isSubmitting}
                 >
-                    Register
+                    Login
                 </LoadingButton>
             </form>
         </Wrapper>
     );
 }
 
-export default Register;
+export default Login;

@@ -1,7 +1,8 @@
 import { User } from "../entities/User";
 import { Arg, InputType, Mutation, Resolver, Field, Query, ObjectType, Ctx } from "type-graphql";
 import argon2 from 'argon2';
-import { Context } from "src/types";
+import { Context } from "../types";
+import { constants } from "../constants";
 
 @InputType()
 class Login {
@@ -96,6 +97,23 @@ export class UserResolver {
         }
     }
 
+    @Mutation(() => Boolean)
+    logout (
+        @Ctx() { req, res }: Context
+    ) {
+        return new Promise((resolve) => 
+            req.session.destroy((err) => {
+                res.clearCookie(constants.__cookie__);
+                if (err) {
+                    console.log(err);
+                    resolve(false);
+                    return
+                }
+                resolve(true)
+            })
+        )
+    }
+
     @Query(() => User)
     userByName (
         @Arg('name', () => String) name: string,
@@ -103,7 +121,7 @@ export class UserResolver {
         return User.findOne({username: name});
     }
 
-    @Query(() => User)
+    @Query(() => User, { nullable: true })
     me (
         @Ctx() { req }: Context,
     ): Promise<User> | null {

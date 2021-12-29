@@ -9,6 +9,10 @@ import MongoStore from "connect-mongo";
 import { MongoClient } from "mongodb"
 import { ApolloServer } from "apollo-server-express";
 import cors from 'cors';
+import {
+    ApolloServerPluginLandingPageGraphQLPlayground,
+    ApolloServerPluginLandingPageProductionDefault
+} from "apollo-server-core";
 
 const main = async () => {
     const options = await getConnectionOptions();
@@ -21,7 +25,7 @@ const main = async () => {
 
     const mongo = await MongoClient.connect(constants.__cache__);
 
-    const whitelist = ['http://localhost:3000', 'https://studio.apollographql.com'] //studio.apollographql.com lets me test the API locally
+    const whitelist = ['http://localhost:3000'] //studio.apollographql.com lets me test the API locally
 
     app.use(
         cors({
@@ -32,7 +36,7 @@ const main = async () => {
 
     app.use(
         session({
-            name: 'qid',
+            name: constants.__cookie__,
             store: MongoStore.create({ 
                 mongoUrl: constants.__cache__,
                 dbName: "leftovers-cache",
@@ -65,7 +69,15 @@ const main = async () => {
             req,
             res,
             mongo
-        })
+        }),
+        plugins: [
+            constants.__prod__
+            ? ApolloServerPluginLandingPageProductionDefault({
+                graphRef: "my-graph-id@my-graph-variant",
+                footer: false,
+            })
+            : ApolloServerPluginLandingPageGraphQLPlayground()
+        ]
     });
     await server.start();
     server.applyMiddleware({ 

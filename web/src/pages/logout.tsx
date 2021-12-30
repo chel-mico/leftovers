@@ -1,28 +1,19 @@
 import { LoadingButton } from '@mui/lab';
-import { TextField, Theme, Typography } from '@mui/material';
+import { Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { useFormik } from 'formik';
 import { FC } from 'react'
 import Wrapper from '../components/Wrapper';
-import { MeDocument, MeQuery, useLoginMutation, useLogoutMutation, useMeQuery } from '../generated/graphql';
-import { toErrorMap } from '../utils/toErrorMap';
+import { useLogoutMutation, useMeQuery } from '../generated/graphql';
 import { useRouter } from 'next/router';
 import { useApolloClient } from '@apollo/client';
+import BackButton from '../components/BackButton';
+import customStyler from '../customStyler';
 
 interface logoutProps {
 
 }
 
-const useStyles = makeStyles<Theme>((theme: Theme) => ({
-    root: {
-        "&.MuiLoadingButton-loading": {
-        backgroundColor: theme.palette.secondary.main
-        },
-        "&:hover.MuiLoadingButton-root": {
-        boxShadow: "none"
-        }
-    }
-}))
+const useStyles = customStyler;
 
 const Logout: FC<logoutProps> = ({}) => {
     const [logout, { loading: logoutLoading }] = useLogoutMutation();
@@ -54,15 +45,11 @@ const Logout: FC<logoutProps> = ({}) => {
                 <Typography sx={{
                     mr: 4,
                     cursor: "pointer",
-                    alignItems: "center"
+                    justifyContent: "center"
                 }}>
                     Are you sure you want to log out, {data!.me!.username}?
                 </Typography>
                 <LoadingButton
-                    sx={{
-                        top: "20px",
-                        boxShadow: "none"
-                    }}
                     className={classes.root}
                     variant="contained" 
                     fullWidth 
@@ -71,11 +58,12 @@ const Logout: FC<logoutProps> = ({}) => {
                     onClick={async () => {
                         await logout();
                         await client.resetStore();
-                        router.push('');
+                        router.push('/');
                     }}
                 >
                     Logout
                 </LoadingButton>
+                <BackButton />
             </Wrapper>
         );
     }

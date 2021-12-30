@@ -1,6 +1,5 @@
 import { LoadingButton } from '@mui/lab';
-import { TextField, Theme, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { TextField, Typography } from '@mui/material';
 import { useFormik } from 'formik';
 import { FC } from 'react'
 import Wrapper from '../components/Wrapper';
@@ -8,27 +7,14 @@ import * as yup from 'yup';
 import { MeDocument, MeQuery, useMeQuery, useRegisterMutation } from '../generated/graphql';
 import { toErrorMap } from '../utils/toErrorMap';
 import { useRouter } from 'next/router';
+import BackButton from '../components/BackButton';
+import customStyler from '../customStyler';
 
 interface registerProps {
     
 }
 
-const useStyles = makeStyles<Theme>((theme: Theme) => ({
-    root: {
-        "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
-        borderColor: theme.palette.primary.main
-        },
-        "&:hover .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
-        borderColor: theme.palette.primary.dark
-        },
-        "&.MuiLoadingButton-loading": {
-        backgroundColor: theme.palette.secondary.main
-        },
-        "&:hover.MuiLoadingButton-root": {
-        boxShadow: "none"
-        }
-    }
-}))
+const useStyles = customStyler;
 
 const validationSchema = yup.object({
     username: yup.string().required(),
@@ -107,8 +93,7 @@ const Register: FC<registerProps> = ({}) => {
                     <TextField
                         fullWidth
                         sx={{
-                            backgroundColor: "background",
-                            top: "10px"
+                            backgroundColor: "background"
                         }}
                         className={classes.root}
                         id="password"
@@ -121,10 +106,6 @@ const Register: FC<registerProps> = ({}) => {
                         helperText={formik.touched.password && formik.errors.password}
                     />
                     <LoadingButton
-                        sx={{
-                            top: "20px",
-                            boxShadow: "none"
-                        }}
                         className={classes.root}
                         variant="contained" 
                         fullWidth 
@@ -133,6 +114,7 @@ const Register: FC<registerProps> = ({}) => {
                     >
                         Register
                     </LoadingButton>
+                    <BackButton />
                 </form>
             </Wrapper>
         )

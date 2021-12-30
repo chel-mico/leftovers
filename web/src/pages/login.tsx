@@ -8,27 +8,14 @@ import * as yup from 'yup';
 import { MeDocument, MeQuery, useLoginMutation, useMeQuery } from '../generated/graphql';
 import { toErrorMap } from '../utils/toErrorMap';
 import { useRouter } from 'next/router';
+import BackButton from '../components/BackButton';
+import customStyler from '../customStyler';
 
 interface loginProps {
     
 }
 
-const useStyles = makeStyles<Theme>((theme: Theme) => ({
-    root: {
-        "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
-        borderColor: theme.palette.primary.main
-        },
-        "&:hover .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
-        borderColor: theme.palette.primary.dark
-        },
-        "&.MuiLoadingButton-loading": {
-        backgroundColor: theme.palette.secondary.main
-        },
-        "&:hover.MuiLoadingButton-root": {
-        boxShadow: "none"
-        }
-    }
-}))
+const useStyles = customStyler;
 
 const validationSchema = yup.object({
     username: yup.string().required(),
@@ -106,10 +93,6 @@ const Login: FC<loginProps> = ({}) => {
                     />
                     <TextField
                         fullWidth
-                        sx={{
-                            backgroundColor: "background",
-                            top: "10px"
-                        }}
                         className={classes.root}
                         id="password"
                         name="password"
@@ -121,10 +104,6 @@ const Login: FC<loginProps> = ({}) => {
                         helperText={formik.touched.password && formik.errors.password}
                     />
                     <LoadingButton
-                        sx={{
-                            top: "20px",
-                            boxShadow: "none"
-                        }}
                         className={classes.root}
                         variant="contained" 
                         fullWidth 
@@ -133,6 +112,7 @@ const Login: FC<loginProps> = ({}) => {
                     >
                         Login
                     </LoadingButton>
+                    <BackButton />
                 </form>
             </Wrapper>
         )

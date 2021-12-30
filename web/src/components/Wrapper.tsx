@@ -26,6 +26,8 @@ const Wrapper: FC<WrapperProps> = ({
                     msTransform: "translate(-50%, -50%)",
                     transform: "translate(-50%, -50%)"
                 }}
+                mt={2}
+                py={2}
             >
                 {children}
             </Box>

@@ -63,7 +63,7 @@ export type Query = {
   __typename?: 'Query';
   ingredient?: Maybe<Ingredient>;
   ingredients: Array<Ingredient>;
-  me: User;
+  me?: Maybe<User>;
   userByName: User;
 };
 
@@ -116,7 +116,7 @@ export type RegisterMutation = { __typename?: 'Mutation', register: { __typename
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', username: string } };
+export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', username: string } | null | undefined };
 
 
 export const LoginDocument = gql`

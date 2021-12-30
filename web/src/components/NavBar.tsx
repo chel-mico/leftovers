@@ -10,9 +10,7 @@ interface NavBarProps {
 }
 
 const NavBar: FC<NavBarProps> = ({}) => {
-    const [logout, { loading: logoutLoading }] = useLogoutMutation();
     const { data, loading } = useMeQuery();
-    const client = useApolloClient()
 
     let body = null;
     if (loading) { //loading the user data
@@ -41,19 +39,11 @@ const NavBar: FC<NavBarProps> = ({}) => {
                 }}>
                     Welcome back, {data.me.username}!
                 </Typography>
-                <LoadingButton 
-                    loading={logoutLoading}
-                    onClick={async () => {
-                        await logout();
-                        await client.resetStore();
-                    }}
-                >
-                    <NavBarLink 
-                        route='#'
-                        label='Logout'
-                        pad={false}
-                    />
-                </LoadingButton>
+                <NavBarLink 
+                    route='/logout'
+                    label='Logout'
+                    pad={false}
+                />
             </>
         )
     }

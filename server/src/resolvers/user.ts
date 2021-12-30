@@ -3,6 +3,7 @@ import { Arg, InputType, Mutation, Resolver, Field, Query, ObjectType, Ctx } fro
 import argon2 from 'argon2';
 import { Context } from "../types";
 import { constants } from "../constants";
+import { getConnection } from "typeorm";
 
 @InputType()
 class Login {
@@ -124,10 +125,18 @@ export class UserResolver {
     @Query(() => User, { nullable: true })
     me (
         @Ctx() { req }: Context,
-    ): Promise<User> | null {
+    ): Promise<User | undefined> | null {
         if (!req.session.userId) {
             return null;
         }
-        return User.findOne(req.session.userId);
+        return getConnection()
+            .getRepository(User)
+            .createQueryBuilder("u")
+            .innerJoinAndSelect(
+                "u.fridge",
+                "f",
+                'u.id = :id AND u.fridgeId = f.id', { id: req.session.userId },
+            )
+            .getOne();
     }
 }

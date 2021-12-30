@@ -18,16 +18,26 @@ export class User extends BaseEntity {
   @Column({ type: 'text' })
   password!: string;
 
-  @OneToOne(() => Fridge, fridge => fridge.owner)
-  @JoinColumn()
-  fridge: Fridge;
-
-  @OneToMany(() => Recipe, recipe => recipe.author)
-  authoredRecipes: Recipe[];
-
   @Field(() => [String])
   @Column("text", {array: true, default: []})
   savedRecipes: string[];
+
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  fridgeId?: string;
+
+  @Field(() => Fridge, { nullable: true })
+  @OneToOne(() => Fridge, fridge => fridge.owner, {
+    cascade: true
+  })
+  @JoinColumn()
+  fridge: Fridge;
+
+  @Field(() => [Recipe], { nullable: true })
+  @OneToMany(() => Recipe, recipe => recipe.author, {
+    cascade: true
+  })
+  authoredRecipes: Recipe[];
 
   @Field(() => String)
   @CreateDateColumn()

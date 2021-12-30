@@ -20,9 +20,12 @@ export class RecipeStep extends BaseEntity {
 
   @Field()
   @Column()
-  recipeID: number;
-  
-  @ManyToOne(() => Recipe, recipe => recipe.steps)
+  recipeId: string;
+
+  @ManyToOne(() => Recipe, recipe => recipe.steps, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+  })
   recipe: Recipe;
   
 }

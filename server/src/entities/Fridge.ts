@@ -1,5 +1,5 @@
 import { Field, ObjectType } from "type-graphql";
-import { BaseEntity, Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { FridgeIngredient } from "./FridgeIngredient";
 import { User } from "./User";
 
@@ -11,14 +11,16 @@ export class Fridge extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
   
-  @OneToMany(() => FridgeIngredient, fridgeIngredients => fridgeIngredients.fridge)
+  @Field(() => [FridgeIngredient], { nullable: true })
+  @OneToMany(() => FridgeIngredient, fridgeIngredients => fridgeIngredients.fridge, {
+    cascade: true
+  })
   fridgeIngredients: FridgeIngredient[];
-
-  @Field()
-  @Column()
-  ownerID: number;
   
-  @OneToOne(() => User, owner => owner.fridge)
-  owner!: User;
+  @OneToOne(() => User, owner => owner.fridge, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+  })
+  owner: User;
   
 }

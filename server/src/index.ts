@@ -13,6 +13,7 @@ import {
     ApolloServerPluginLandingPageGraphQLPlayground,
     ApolloServerPluginLandingPageProductionDefault
 } from "apollo-server-core";
+import { FridgeResolver } from "./resolvers/fridge";
 
 const main = async () => {
     const options = await getConnectionOptions();
@@ -61,7 +62,8 @@ const main = async () => {
         schema: await buildSchema({
             resolvers: [
                 IngredientResolver,
-                UserResolver
+                UserResolver,
+                FridgeResolver
             ],
             validate: true
         }),

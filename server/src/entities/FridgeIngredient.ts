@@ -1,7 +1,7 @@
 import { Ingredient } from "./Ingredient";
 import { Fridge } from "./Fridge";
 import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Field, Float, ObjectType } from "type-graphql";
+import { Field, ObjectType } from "type-graphql";
 
 @ObjectType()
 @Entity()
@@ -10,27 +10,27 @@ export class FridgeIngredient extends BaseEntity {
   @Field()
   @PrimaryGeneratedColumn("uuid")
   id!: string;
-  
-  @Field()
-  @Column({ type: 'text' })
-  measurement: string; //cup, tbsp, tsp, g, kg, L, mL
 
-  @Field(() => Float)
-  @Column({ type: 'float' })
-  quantity: number;
+  @Field()
+  @Column()
+  name: string;
   
   @Field()
   @Column()
-  ingredientID: number;
+  ingredientId: string;
   
+  @Field(() => Ingredient, { nullable: true })
   @ManyToOne(() => Ingredient, ingredient => ingredient.fridgeIngredients)
-  ingredient!: Ingredient;
+  ingredient: Ingredient;
 
   @Field()
   @Column()
-  fridgeID: number;
+  fridgeId: string;
   
-  @ManyToOne(() => Fridge, fridge => fridge.fridgeIngredients)
-  fridge!: Fridge;
+  @ManyToOne(() => Fridge, fridge => fridge.fridgeIngredients, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+  })
+  fridge: Fridge;
   
 }

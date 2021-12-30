@@ -2,8 +2,9 @@ import { User } from "./User";
 import { RecipeIngredient } from "./RecipeIngredient";
 import { RecipeStep } from "./RecipeStep";
 import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, OneToMany, Column, BaseEntity } from "typeorm";
-import { Field, Int } from "type-graphql";
+import { Field, Int, ObjectType } from "type-graphql";
 
+@ObjectType()
 @Entity()
 export class Recipe extends BaseEntity {
 
@@ -21,15 +22,25 @@ export class Recipe extends BaseEntity {
 
   @Field()
   @Column()
-  authorID: number;
+  authorId: string;
   
-  @ManyToOne(() => User, author => author.authoredRecipes)
+  @Field(() => User, { nullable: true })
+  @ManyToOne(() => User, author => author.authoredRecipes, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+  })
   author: User;
 
-  @OneToMany(() => RecipeIngredient, ingredient => ingredient.recipe)
+  @Field(() => [RecipeIngredient], { nullable: true })
+  @OneToMany(() => RecipeIngredient, ingredient => ingredient.recipe, {
+    cascade: true
+  })
   recipeIngredients: RecipeIngredient[];
 
-  @OneToMany(() => RecipeStep, steps => steps.recipe)
+  @Field(() => [RecipeStep], { nullable: true })
+  @OneToMany(() => RecipeStep, steps => steps.recipe, {
+    cascade: true
+  })
   steps: RecipeStep[];
 
   @Field(() => String)

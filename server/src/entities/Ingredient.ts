@@ -12,9 +12,10 @@ export class Ingredient extends BaseEntity {
   id: string;
   
   @Field()
-  @Column({ type: 'text' })
+  @Column({ type: 'text', unique: true })
   name!: string;
 
+  @Field(() => [RecipeIngredient], { nullable: true })
   @OneToMany(() => RecipeIngredient, recipeIngredients => recipeIngredients.ingredient)
   recipeIngredients: RecipeIngredient[];
 

@@ -3,7 +3,7 @@ import { Arg, InputType, Mutation, Resolver, Field, Query, ObjectType, Ctx } fro
 import argon2 from 'argon2';
 import { Context } from "../types";
 import { constants } from "../constants";
-import { getConnection } from "typeorm";
+import { Fridge } from "../entities/Fridge";
 
 @InputType()
 class Login {
@@ -34,6 +34,7 @@ export class UserResolver {
     @Mutation(() => UserResponse)
     async register (
         @Arg('input', () => Login) input: Login,
+        @Ctx() { req }: Context
     ): Promise<UserResponse> {
         if (input.username.length < 3 || input.username.length > 32) {
             return {errors: [{
@@ -53,9 +54,21 @@ export class UserResolver {
         }
 
         input.password = await argon2.hash(input.password);
-        const newUser = await User.create({
+        const newUser = User.create({
             ...input
-        }).save();
+        });
+
+        const fridge = Fridge.create({
+            fridgeIngredients: [],
+            owner: newUser
+        });
+        newUser.fridge = fridge;
+        newUser.fridgeId = fridge.id;
+        await newUser.save();
+
+        req.session.userId = newUser.id;
+        req.session.fridgeId = fridge.id;
+        
         return {
             user: newUser
         }
@@ -91,7 +104,8 @@ export class UserResolver {
             }]}
         }
 
-        req.session.userId = user.id
+        req.session.userId = user.id;
+        req.session.fridgeId = user.fridgeId;
 
         return {
             user: user
@@ -129,14 +143,6 @@ export class UserResolver {
         if (!req.session.userId) {
             return null;
         }
-        return getConnection()
-            .getRepository(User)
-            .createQueryBuilder("u")
-            .innerJoinAndSelect(
-                "u.fridge",
-                "f",
-                'u.id = :id AND u.fridgeId = f.id', { id: req.session.userId },
-            )
-            .getOne();
+        return User.findOne(req.session.userId);
     }
 }

@@ -13,7 +13,8 @@ export class Fridge extends BaseEntity {
   
   @Field(() => [FridgeIngredient], { nullable: true })
   @OneToMany(() => FridgeIngredient, fridgeIngredients => fridgeIngredients.fridge, {
-    cascade: true
+    cascade: true,
+    eager: true
   })
   fridgeIngredients: FridgeIngredient[];
   

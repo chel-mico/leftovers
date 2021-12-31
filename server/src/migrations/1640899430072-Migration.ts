@@ -1,10 +1,10 @@
 import {MigrationInterface, QueryRunner} from "typeorm";
 
-export class Migration1640854447445 implements MigrationInterface {
-    name = 'Migration1640854447445'
+export class Migration1640899430072 implements MigrationInterface {
+    name = 'Migration1640899430072'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`CREATE TABLE "user" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "username" text NOT NULL, "password" text NOT NULL, "savedRecipes" text array NOT NULL DEFAULT '{}', "fridgeId" uuid, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), CONSTRAINT "UQ_78a916df40e02a9deb1c4b75edb" UNIQUE ("username"), CONSTRAINT "REL_7522f14622518f2125476192d2" UNIQUE ("fridgeId"), CONSTRAINT "PK_cace4a159ff9f2512dd42373760" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TABLE "user" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "username" text NOT NULL, "password" text NOT NULL, "savedRecipes" text array NOT NULL DEFAULT '{}', "fridgeId" uuid NOT NULL, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), CONSTRAINT "UQ_78a916df40e02a9deb1c4b75edb" UNIQUE ("username"), CONSTRAINT "REL_7522f14622518f2125476192d2" UNIQUE ("fridgeId"), CONSTRAINT "PK_cace4a159ff9f2512dd42373760" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "recipe_step" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "desc" text NOT NULL, "stepNum" integer NOT NULL, "recipeId" uuid NOT NULL, CONSTRAINT "PK_654c0969ac0899d321c00ea0eaf" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "recipe" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "title" text NOT NULL, "saves" integer NOT NULL DEFAULT '0', "authorId" uuid NOT NULL, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), CONSTRAINT "PK_e365a2fedf57238d970e07825ca" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "recipe_ingredient" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "name" text NOT NULL, "quantity" text NOT NULL, "ingredientId" uuid NOT NULL, "recipeId" uuid NOT NULL, CONSTRAINT "PK_a13ac3f2cebdd703ac557c5377c" PRIMARY KEY ("id"))`);

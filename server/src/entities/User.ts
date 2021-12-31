@@ -22,11 +22,11 @@ export class User extends BaseEntity {
   @Column("text", {array: true, default: []})
   savedRecipes: string[];
 
-  @Field({ nullable: true })
-  @Column({ nullable: true })
-  fridgeId?: string;
+  @Field()
+  @Column()
+  fridgeId: string;
 
-  @Field(() => Fridge, { nullable: true })
+  @Field(() => Fridge)
   @OneToOne(() => Fridge, fridge => fridge.owner, {
     cascade: true
   })

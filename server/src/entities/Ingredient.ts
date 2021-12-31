@@ -16,10 +16,14 @@ export class Ingredient extends BaseEntity {
   name!: string;
 
   @Field(() => [RecipeIngredient], { nullable: true })
-  @OneToMany(() => RecipeIngredient, recipeIngredients => recipeIngredients.ingredient)
+  @OneToMany(() => RecipeIngredient, recipeIngredients => recipeIngredients.ingredient, {
+    cascade: true
+  })
   recipeIngredients: RecipeIngredient[];
 
-  @OneToMany(() => FridgeIngredient, fridgeIngredients => fridgeIngredients.ingredient)
+  @OneToMany(() => FridgeIngredient, fridgeIngredients => fridgeIngredients.ingredient, {
+    cascade: true
+  })
   fridgeIngredients: FridgeIngredient[];
   
 }

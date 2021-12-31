@@ -1,24 +1,15 @@
 import { Fridge } from "../entities/Fridge";
 import { Arg, Ctx, Field, Mutation, ObjectType, Resolver, Query } from "type-graphql";
 import { Context } from "../types";
-import { User } from "../entities/User";
 import { Ingredient } from "../entities/Ingredient";
 import { FridgeIngredient } from "../entities/FridgeIngredient";
-
-@ObjectType()
-class FridgeResponse {
-    @Field(() => [String], {nullable: true})
-    errors?: string[]
-    @Field(() => Fridge, {nullable: true})
-    fridge?: Fridge
-}
 
 @ObjectType()
 class FridgeIngredientResponse {
     @Field(() => [String], {nullable: true})
     errors?: string[]
-    @Field(() => Ingredient, {nullable: true})
-    ingredient?: Ingredient
+    @Field(() => FridgeIngredient, {nullable: true})
+    fridgeIngredient?: FridgeIngredient
 }
 
 @Resolver()
@@ -30,40 +21,14 @@ export class FridgeResolver {
         return Fridge.findOne(id);
     }
 
-    @Mutation(() => FridgeResponse)
-    async makeFridge(
+    @Query(() => Fridge, { nullable: true })
+    userFridge(
         @Ctx() { req }: Context
-    ): Promise<FridgeResponse> {
-        if (!req.session.userId) {
-            return {
-                errors: ["User is not logged in!"]
-            };
+    ): Promise<Fridge | undefined> | null {
+        if (!req.session.fridgeId) {
+            return null;
         }
-
-        const owner = await User.findOne(req.session.userId)
-        if (!owner) {
-            return {
-                errors: ["Something went wrong with getting the user!"]
-            };
-        }
-
-        if (owner.fridgeId) {
-            return {
-                errors: ["User already has a fridge!"]
-            }
-        }
-
-        const newFridge = Fridge.create({
-            fridgeIngredients: [],
-            owner: owner
-        });
-        owner.fridge = newFridge;
-        owner.fridgeId = newFridge.id;
-        await owner.save();
-
-        return {
-            fridge: newFridge
-        }
+        return Fridge.findOne(req.session.fridgeId)
     }
 
     @Mutation(() => FridgeIngredientResponse)
@@ -71,31 +36,27 @@ export class FridgeResolver {
         @Arg("name", () => String) name: string,
         @Ctx() { req }: Context
     ): Promise<FridgeIngredientResponse> {
-        if (!req.session.userId) {
+        if (!req.session.fridgeId) {
             return {
                 errors: ["User is not logged in!"]
             };
         }
 
-        const fridge = await Fridge.findOne({where: [
-            {ownerID: req.session.userId}
-        ]})
+        const fridge = await Fridge.findOne(req.session.fridgeId)
         if (!fridge) {
             return {
-                errors: ["User doesn't have a fridge!"]
+                errors: ["Something went wrong with getting the fridge!"]
             };
         }
 
-
-        let ingredient = await Ingredient.findOne({where: [
-            {name}
-        ]})
+        let ingredient = await Ingredient.findOne({
+            where: [{name}],
+            relations: ["fridgeIngredients"]
+        })
         if (!ingredient) {
-            ingredient = await Ingredient.create({
-                name,
-                fridgeIngredients: [],
-                recipeIngredients: []
-            }).save()
+            return {
+                errors: ["That ingredient doesn't exist in our database!"]
+            };
         }
 
         const newIngredient = FridgeIngredient.create({
@@ -105,14 +66,13 @@ export class FridgeResolver {
             fridge,
             name
         });
-
         ingredient.fridgeIngredients.push(newIngredient);
         await ingredient.save();
         fridge.fridgeIngredients.push(newIngredient);
-        await ingredient.save();
+        await fridge.save();
 
         return {
-            ingredient: ingredient
+            fridgeIngredient: newIngredient
         }
     }
 }

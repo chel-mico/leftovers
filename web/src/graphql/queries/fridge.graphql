@@ -1,0 +1,7 @@
+query Fridge {
+    fridge {
+        fridgeIngredients {
+            name
+        }
+    }
+}

@@ -23,6 +23,9 @@ const theme = createTheme({
     info: {
       main: "#FAE7C6"
     }
+  },
+  zIndex: {
+    drawer: 0
   }
 })
 

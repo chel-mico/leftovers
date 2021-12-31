@@ -1,0 +1,10 @@
+mutation AddFridgeIngredient($name: String!) {
+    addFridgeIngredient (
+        name: $name
+    ) {
+        errors
+        fridgeIngredient {
+            name
+        }
+    }
+}

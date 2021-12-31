@@ -14,15 +14,8 @@ class FridgeIngredientResponse {
 
 @Resolver()
 export class FridgeResolver {
-    @Query(() => Fridge)
-    fridge(
-        @Arg("id", () => String) id: string
-    ): Promise<Fridge | undefined> {
-        return Fridge.findOne(id);
-    }
-
     @Query(() => Fridge, { nullable: true })
-    userFridge(
+    fridge(
         @Ctx() { req }: Context
     ): Promise<Fridge | undefined> | null {
         if (!req.session.fridgeId) {
@@ -59,6 +52,14 @@ export class FridgeResolver {
             };
         }
 
+        for (const [, element] of fridge.fridgeIngredients.entries()) {
+            if (element.name === ingredient.name) {
+                return {
+                    errors: ["That ingredient is already in your fridge!"]
+                }
+            }
+        }
+
         const newIngredient = FridgeIngredient.create({
             ingredientId: ingredient.id,
             fridgeId: fridge.id,
@@ -66,10 +67,11 @@ export class FridgeResolver {
             fridge,
             name
         });
-        ingredient.fridgeIngredients.push(newIngredient);
-        await ingredient.save();
+
         fridge.fridgeIngredients.push(newIngredient);
         await fridge.save();
+        ingredient.fridgeIngredients.push(newIngredient);
+        await ingredient.save();
 
         return {
             fridgeIngredient: newIngredient

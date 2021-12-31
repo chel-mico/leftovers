@@ -11,7 +11,7 @@ export class Fridge extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
   
-  @Field(() => [FridgeIngredient], { nullable: true })
+  @Field(() => [FridgeIngredient])
   @OneToMany(() => FridgeIngredient, fridgeIngredients => fridgeIngredients.fridge, {
     cascade: true,
     eager: true

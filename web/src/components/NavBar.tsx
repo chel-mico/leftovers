@@ -1,8 +1,7 @@
-import { useApolloClient } from '@apollo/client';
-import { LoadingButton } from '@mui/lab';
 import { AppBar, Theme, Toolbar, Typography } from '@mui/material'
 import { FC } from 'react';
-import { useLogoutMutation, useMeQuery } from '../generated/graphql';
+import customStyler from '../customStyler';
+import { useMeQuery } from '../generated/graphql';
 import NavBarLink from './NaxBarLink';
 
 interface NavBarProps {
@@ -11,6 +10,8 @@ interface NavBarProps {
 
 const NavBar: FC<NavBarProps> = ({}) => {
     const { data, loading } = useMeQuery();
+
+    const classes = customStyler()
 
     let body = null;
     if (loading) { //loading the user data
@@ -49,7 +50,7 @@ const NavBar: FC<NavBarProps> = ({}) => {
     }
 
     return (
-        <AppBar sx={{boxShadow: "none"}}>
+        <AppBar className={classes.appBar}>
             <Toolbar>
                 <Typography variant="h4" sx={{
                     flexGrow: "1",

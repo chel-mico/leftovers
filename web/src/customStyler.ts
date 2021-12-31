@@ -17,6 +17,13 @@ const customStyler = makeStyles<Theme>((theme: Theme) => ({
         },
         marginTop: '10px',
         boxShadow: "none"
+    },
+    appBar: {
+        boxShadow: "none",
+        zIndex: theme.zIndex.drawer + 1
+    },
+    drawer: {
+        zIndex: theme.zIndex.drawer
     }
 }));
 

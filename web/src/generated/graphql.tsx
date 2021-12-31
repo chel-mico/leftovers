@@ -21,14 +21,42 @@ export type FieldError = {
   message: Scalars['String'];
 };
 
+export type Fridge = {
+  __typename?: 'Fridge';
+  fridgeIngredients: Array<FridgeIngredient>;
+  id: Scalars['String'];
+};
+
+export type FridgeIngredient = {
+  __typename?: 'FridgeIngredient';
+  fridgeId: Scalars['String'];
+  id: Scalars['String'];
+  ingredient?: Maybe<Ingredient>;
+  ingredientId: Scalars['String'];
+  name: Scalars['String'];
+};
+
+export type FridgeIngredientResponse = {
+  __typename?: 'FridgeIngredientResponse';
+  errors?: Maybe<Array<Scalars['String']>>;
+  fridgeIngredient?: Maybe<FridgeIngredient>;
+};
+
 export type Ingredient = {
   __typename?: 'Ingredient';
   id: Scalars['String'];
   name: Scalars['String'];
+  recipeIngredients?: Maybe<Array<RecipeIngredient>>;
 };
 
 export type IngredientInput = {
   name: Scalars['String'];
+};
+
+export type IngredientResponse = {
+  __typename?: 'IngredientResponse';
+  errors?: Maybe<Array<Scalars['String']>>;
+  ingredient?: Maybe<Ingredient>;
 };
 
 export type Login = {
@@ -38,10 +66,16 @@ export type Login = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  addIngredient: Ingredient;
+  addFridgeIngredient: FridgeIngredientResponse;
+  addIngredient: IngredientResponse;
   login: UserResponse;
   logout: Scalars['Boolean'];
   register: UserResponse;
+};
+
+
+export type MutationAddFridgeIngredientArgs = {
+  name: Scalars['String'];
 };
 
 
@@ -61,15 +95,16 @@ export type MutationRegisterArgs = {
 
 export type Query = {
   __typename?: 'Query';
-  ingredient?: Maybe<Ingredient>;
+  fridge?: Maybe<Fridge>;
+  ingredientByName?: Maybe<Ingredient>;
   ingredients: Array<Ingredient>;
   me?: Maybe<User>;
   userByName: User;
 };
 
 
-export type QueryIngredientArgs = {
-  id: Scalars['Int'];
+export type QueryIngredientByNameArgs = {
+  name: Scalars['String'];
 };
 
 
@@ -77,9 +112,42 @@ export type QueryUserByNameArgs = {
   name: Scalars['String'];
 };
 
+export type Recipe = {
+  __typename?: 'Recipe';
+  author?: Maybe<User>;
+  authorId: Scalars['String'];
+  createdAt: Scalars['String'];
+  id: Scalars['String'];
+  recipeIngredients?: Maybe<Array<RecipeIngredient>>;
+  saves: Scalars['Int'];
+  steps?: Maybe<Array<RecipeStep>>;
+  title: Scalars['String'];
+  updatedAt: Scalars['String'];
+};
+
+export type RecipeIngredient = {
+  __typename?: 'RecipeIngredient';
+  id: Scalars['String'];
+  ingredientId: Scalars['String'];
+  name: Scalars['String'];
+  quantity: Scalars['String'];
+  recipeId: Scalars['String'];
+};
+
+export type RecipeStep = {
+  __typename?: 'RecipeStep';
+  desc: Scalars['String'];
+  id: Scalars['String'];
+  recipeId: Scalars['String'];
+  stepNum: Scalars['Int'];
+};
+
 export type User = {
   __typename?: 'User';
+  authoredRecipes?: Maybe<Array<Recipe>>;
   createdAt: Scalars['String'];
+  fridge: Fridge;
+  fridgeId: Scalars['String'];
   id: Scalars['String'];
   savedRecipes: Array<Scalars['String']>;
   updatedAt: Scalars['String'];
@@ -91,6 +159,13 @@ export type UserResponse = {
   errors?: Maybe<Array<FieldError>>;
   user?: Maybe<User>;
 };
+
+export type AddFridgeIngredientMutationVariables = Exact<{
+  name: Scalars['String'];
+}>;
+
+
+export type AddFridgeIngredientMutation = { __typename?: 'Mutation', addFridgeIngredient: { __typename?: 'FridgeIngredientResponse', errors?: Array<string> | null | undefined, fridgeIngredient?: { __typename?: 'FridgeIngredient', name: string } | null | undefined } };
 
 export type LoginMutationVariables = Exact<{
   username: Scalars['String'];
@@ -113,12 +188,53 @@ export type RegisterMutationVariables = Exact<{
 
 export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null | undefined, user?: { __typename?: 'User', username: string, id: string } | null | undefined } };
 
+export type FridgeQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FridgeQuery = { __typename?: 'Query', fridge?: { __typename?: 'Fridge', fridgeIngredients: Array<{ __typename?: 'FridgeIngredient', name: string }> } | null | undefined };
+
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', username: string } | null | undefined };
 
 
+export const AddFridgeIngredientDocument = gql`
+    mutation AddFridgeIngredient($name: String!) {
+  addFridgeIngredient(name: $name) {
+    errors
+    fridgeIngredient {
+      name
+    }
+  }
+}
+    `;
+export type AddFridgeIngredientMutationFn = Apollo.MutationFunction<AddFridgeIngredientMutation, AddFridgeIngredientMutationVariables>;
+
+/**
+ * __useAddFridgeIngredientMutation__
+ *
+ * To run a mutation, you first call `useAddFridgeIngredientMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddFridgeIngredientMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addFridgeIngredientMutation, { data, loading, error }] = useAddFridgeIngredientMutation({
+ *   variables: {
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function useAddFridgeIngredientMutation(baseOptions?: Apollo.MutationHookOptions<AddFridgeIngredientMutation, AddFridgeIngredientMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddFridgeIngredientMutation, AddFridgeIngredientMutationVariables>(AddFridgeIngredientDocument, options);
+      }
+export type AddFridgeIngredientMutationHookResult = ReturnType<typeof useAddFridgeIngredientMutation>;
+export type AddFridgeIngredientMutationResult = Apollo.MutationResult<AddFridgeIngredientMutation>;
+export type AddFridgeIngredientMutationOptions = Apollo.BaseMutationOptions<AddFridgeIngredientMutation, AddFridgeIngredientMutationVariables>;
 export const LoginDocument = gql`
     mutation Login($username: String!, $password: String!) {
   login(input: {username: $username, password: $password}) {
@@ -231,6 +347,42 @@ export function useRegisterMutation(baseOptions?: Apollo.MutationHookOptions<Reg
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
+export const FridgeDocument = gql`
+    query Fridge {
+  fridge {
+    fridgeIngredients {
+      name
+    }
+  }
+}
+    `;
+
+/**
+ * __useFridgeQuery__
+ *
+ * To run a query within a React component, call `useFridgeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFridgeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFridgeQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useFridgeQuery(baseOptions?: Apollo.QueryHookOptions<FridgeQuery, FridgeQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FridgeQuery, FridgeQueryVariables>(FridgeDocument, options);
+      }
+export function useFridgeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FridgeQuery, FridgeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FridgeQuery, FridgeQueryVariables>(FridgeDocument, options);
+        }
+export type FridgeQueryHookResult = ReturnType<typeof useFridgeQuery>;
+export type FridgeLazyQueryHookResult = ReturnType<typeof useFridgeLazyQuery>;
+export type FridgeQueryResult = Apollo.QueryResult<FridgeQuery, FridgeQueryVariables>;
 export const MeDocument = gql`
     query Me {
   me {

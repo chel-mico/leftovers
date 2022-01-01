@@ -1,4 +1,4 @@
-import { Theme } from '@mui/material';
+import { SxProps, Theme } from '@mui/material';
 import { FC } from 'react';
 import { LoadingButton } from '@mui/lab';
 import { useRouter } from 'next/router';
@@ -6,12 +6,16 @@ import customStyler from '../customStyler';
 
 interface BackButtonProps {
     theme?: Theme,
-    label?: string
+    label?: string,
+    sx?: SxProps<Theme>
 }
 
 const useStyles = customStyler;
 
-const BackButton: FC<BackButtonProps> = ({ label = "Back"}) => {
+const BackButton: FC<BackButtonProps> = ({ 
+    label = "Back",
+    sx = {}
+}) => {
     const router = useRouter();
     
     let loading = false;
@@ -32,6 +36,7 @@ const BackButton: FC<BackButtonProps> = ({ label = "Back"}) => {
             onClick={() => {
                 router.push('/');
             }}
+            sx={sx}
         >
             {label}
         </LoadingButton>

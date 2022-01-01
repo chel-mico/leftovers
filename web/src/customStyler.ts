@@ -24,6 +24,14 @@ const customStyler = makeStyles<Theme>((theme: Theme) => ({
     },
     drawer: {
         zIndex: theme.zIndex.drawer
+    },
+    search: {
+        "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+        borderColor: theme.palette.primary.main
+        },
+        "&:hover .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+        borderColor: theme.palette.primary.dark
+        }
     }
 }));
 

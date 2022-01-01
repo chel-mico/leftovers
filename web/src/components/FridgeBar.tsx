@@ -1,20 +1,27 @@
-import { Divider, Drawer, List, ListItem, ListItemText, Theme, Toolbar, Typography } from '@mui/material'
+import { Divider, Drawer, List, ListItem, ListItemText, Theme, Toolbar } from '@mui/material'
+import { useRouter } from 'next/router';
 import { FC } from 'react';
 import customStyler from '../customStyler';
 import { useFridgeQuery, useMeQuery } from '../generated/graphql';
 
 
-interface FridgeProps {
+interface FridgeBarProps {
     theme?: Theme
 }
 
 const useStyles = customStyler;
 
-const Fridge: FC<FridgeProps> = ({}) => {
+const FridgeBar: FC<FridgeBarProps> = ({}) => {
     const { data, loading } = useFridgeQuery();
     const { data: meData, loading: meLoading } = useMeQuery();
 
     const classes = useStyles();
+
+    const router = useRouter();
+
+    const handleListItemClick = async (event: any, route: String) => {
+        await router.push("/fridge");
+    }
 
     let body = null;
     if (loading || meLoading) { //loading the user data
@@ -48,7 +55,11 @@ const Fridge: FC<FridgeProps> = ({}) => {
                     <ListItem key={`${meData.me.username}'s Fridge`}>
                         <ListItemText primary={`${meData.me.username}'s Fridge`} />
                     </ListItem>
-                    <ListItem button key={"Edit Ingredients"}>
+                    <ListItem 
+                        button={true}
+                        key={"Edit Ingredients"}
+                        onClick={(event) => handleListItemClick(event, "/fridge")}
+                    >
                         <ListItemText primary={"Edit Ingredients"} />
                     </ListItem>
                 </List>
@@ -76,4 +87,4 @@ const Fridge: FC<FridgeProps> = ({}) => {
     )
 }
 
-export default Fridge;
+export default FridgeBar;

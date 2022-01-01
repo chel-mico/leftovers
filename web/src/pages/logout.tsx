@@ -1,6 +1,5 @@
 import { LoadingButton } from '@mui/lab';
-import { Theme, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Typography } from '@mui/material';
 import { FC } from 'react'
 import Wrapper from '../components/Wrapper';
 import { useLogoutMutation, useMeQuery } from '../generated/graphql';
@@ -47,7 +46,7 @@ const Logout: FC<logoutProps> = ({}) => {
                     cursor: "pointer",
                     justifyContent: "center"
                 }}>
-                    Are you sure you want to log out, {data!.me!.username}?
+                    Are you sure you want to log out, {data.me.username}?
                 </Typography>
                 <LoadingButton
                     className={classes.root}

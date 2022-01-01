@@ -188,6 +188,11 @@ export type RegisterMutationVariables = Exact<{
 
 export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null | undefined, user?: { __typename?: 'User', username: string, id: string } | null | undefined } };
 
+export type AllIngredientsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AllIngredientsQuery = { __typename?: 'Query', ingredients: Array<{ __typename?: 'Ingredient', name: string }> };
+
 export type FridgeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -347,6 +352,40 @@ export function useRegisterMutation(baseOptions?: Apollo.MutationHookOptions<Reg
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
+export const AllIngredientsDocument = gql`
+    query AllIngredients {
+  ingredients {
+    name
+  }
+}
+    `;
+
+/**
+ * __useAllIngredientsQuery__
+ *
+ * To run a query within a React component, call `useAllIngredientsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAllIngredientsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAllIngredientsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAllIngredientsQuery(baseOptions?: Apollo.QueryHookOptions<AllIngredientsQuery, AllIngredientsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AllIngredientsQuery, AllIngredientsQueryVariables>(AllIngredientsDocument, options);
+      }
+export function useAllIngredientsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AllIngredientsQuery, AllIngredientsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AllIngredientsQuery, AllIngredientsQueryVariables>(AllIngredientsDocument, options);
+        }
+export type AllIngredientsQueryHookResult = ReturnType<typeof useAllIngredientsQuery>;
+export type AllIngredientsLazyQueryHookResult = ReturnType<typeof useAllIngredientsLazyQuery>;
+export type AllIngredientsQueryResult = Apollo.QueryResult<AllIngredientsQuery, AllIngredientsQueryVariables>;
 export const FridgeDocument = gql`
     query Fridge {
   fridge {

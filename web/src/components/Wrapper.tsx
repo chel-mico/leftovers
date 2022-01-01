@@ -3,13 +3,44 @@ import { Box } from '@mui/system';
 import { FC } from 'react'
 
 interface WrapperProps {
-    theme?: Theme
+    theme?: Theme,
+    width?: string
 }
 
 const Wrapper: FC<WrapperProps> = ({ 
-    children
+    children,
+    width = "400px"
 }) => {
     return (
+        <Box
+            sx={{
+                height: "200px",
+                position: "relative",
+                backgroundColor: "background.default"
+            }}
+        >
+            <Box
+                sx={{
+                    margin: 0,
+                    position: "absolute",
+                    top: "125%",
+                    left: "50%",
+                    msTransform: "translate(-50%, -50%)",
+                    transform: "translate(-50%, -50%)",
+                    width
+                }}
+                mt={2}
+                py={2}
+            >
+                {children}
+            </Box>
+        </Box>
+    );
+}
+
+export default Wrapper
+
+/*
         <Box
             sx={{
                 height: "200px",
@@ -32,7 +63,4 @@ const Wrapper: FC<WrapperProps> = ({
                 {children}
             </Box>
         </Box>
-    );
-}
-
-export default Wrapper
+*/

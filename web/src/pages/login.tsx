@@ -63,64 +63,60 @@ const Login: FC<loginProps> = ({}) => {
     } else if (data?.me) { //user is already logged in
         router.push('/');
         body = (
-            <Wrapper>
-                <Typography sx={{
-                    mr: 4,
-                    cursor: "pointer"
-                }}>
-                    You aren&apos;t supposed to be here! \n Redirecting...
-                </Typography>
-            </Wrapper>
+            <Typography sx={{
+                mr: 4,
+                cursor: "pointer"
+            }}>
+                You aren&apos;t supposed to be here! \n Redirecting...
+            </Typography>
         )
     } else {
         body = (
-            <Wrapper>
-                <form onSubmit={formik.handleSubmit}>
-                    <TextField
-                        fullWidth
-                        sx={{
-                            backgroundColor: "background"
-                        }}
-                        className={classes.root}
-                        id="username"
-                        name="username"
-                        label="Username"
-                        value={formik.values.username}
-                        onChange={formik.handleChange}
-                        error={formik.touched.username && Boolean(formik.errors.username)}
-                        helperText={formik.touched.username && formik.errors.username}
-                    />
-                    <TextField
-                        fullWidth
-                        className={classes.root}
-                        id="password"
-                        name="password"
-                        label="Password"
-                        type="password"
-                        value={formik.values.password}
-                        onChange={formik.handleChange}
-                        error={formik.touched.password && Boolean(formik.errors.password)}
-                        helperText={formik.touched.password && formik.errors.password}
-                    />
-                    <LoadingButton
-                        className={classes.root}
-                        variant="contained" 
-                        fullWidth 
-                        type="submit"
-                        loading={formik.isSubmitting}
-                    >
-                        Login
-                    </LoadingButton>
-                    <BackButton />
-                </form>
-            </Wrapper>
+            <form onSubmit={formik.handleSubmit}>
+                <TextField
+                    fullWidth
+                    sx={{
+                        backgroundColor: "background"
+                    }}
+                    className={classes.root}
+                    id="username"
+                    name="username"
+                    label="Username"
+                    value={formik.values.username}
+                    onChange={formik.handleChange}
+                    error={formik.touched.username && Boolean(formik.errors.username)}
+                    helperText={formik.touched.username && formik.errors.username}
+                />
+                <TextField
+                    fullWidth
+                    className={classes.root}
+                    id="password"
+                    name="password"
+                    label="Password"
+                    type="password"
+                    value={formik.values.password}
+                    onChange={formik.handleChange}
+                    error={formik.touched.password && Boolean(formik.errors.password)}
+                    helperText={formik.touched.password && formik.errors.password}
+                />
+                <LoadingButton
+                    className={classes.root}
+                    variant="contained" 
+                    fullWidth 
+                    type="submit"
+                    loading={formik.isSubmitting}
+                >
+                    Login
+                </LoadingButton>
+                <BackButton />
+            </form>
         )
     }
 
     return (
-        <div>
+        <Wrapper>
             {body}
-        </div>
+        </Wrapper>
     );
 }
 

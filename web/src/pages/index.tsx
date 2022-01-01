@@ -1,11 +1,11 @@
 import type { NextPage } from 'next'
-import Fridge from '../components/Fridge'
+import FridgeBar from '../components/FridgeBar'
 import NavBar from '../components/NavBar'
 
 const Home: NextPage = () => {
   return (
     <>
-      <Fridge />
+      <FridgeBar />
       <NavBar />
     </>
   )

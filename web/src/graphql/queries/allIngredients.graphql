@@ -1,0 +1,5 @@
+query AllIngredients {
+    ingredients {
+        name
+    }
+}

@@ -36,6 +36,12 @@ export type FridgeIngredient = {
   name: Scalars['String'];
 };
 
+export type FridgeIngredientRemoveResponse = {
+  __typename?: 'FridgeIngredientRemoveResponse';
+  errors?: Maybe<Array<Scalars['String']>>;
+  removed?: Maybe<Scalars['Boolean']>;
+};
+
 export type FridgeIngredientResponse = {
   __typename?: 'FridgeIngredientResponse';
   errors?: Maybe<Array<Scalars['String']>>;
@@ -71,6 +77,7 @@ export type Mutation = {
   login: UserResponse;
   logout: Scalars['Boolean'];
   register: UserResponse;
+  removeFridgeIngredient: FridgeIngredientRemoveResponse;
 };
 
 
@@ -91,6 +98,11 @@ export type MutationLoginArgs = {
 
 export type MutationRegisterArgs = {
   input: Login;
+};
+
+
+export type MutationRemoveFridgeIngredientArgs = {
+  name: Scalars['String'];
 };
 
 export type Query = {
@@ -187,6 +199,13 @@ export type RegisterMutationVariables = Exact<{
 
 
 export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null | undefined, user?: { __typename?: 'User', username: string, id: string } | null | undefined } };
+
+export type RemoveFridgeIngredientMutationVariables = Exact<{
+  name: Scalars['String'];
+}>;
+
+
+export type RemoveFridgeIngredientMutation = { __typename?: 'Mutation', removeFridgeIngredient: { __typename?: 'FridgeIngredientRemoveResponse', removed?: boolean | null | undefined, errors?: Array<string> | null | undefined } };
 
 export type AllIngredientsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -352,6 +371,40 @@ export function useRegisterMutation(baseOptions?: Apollo.MutationHookOptions<Reg
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
+export const RemoveFridgeIngredientDocument = gql`
+    mutation RemoveFridgeIngredient($name: String!) {
+  removeFridgeIngredient(name: $name) {
+    removed
+    errors
+  }
+}
+    `;
+export type RemoveFridgeIngredientMutationFn = Apollo.MutationFunction<RemoveFridgeIngredientMutation, RemoveFridgeIngredientMutationVariables>;
+
+/**
+ * __useRemoveFridgeIngredientMutation__
+ *
+ * To run a mutation, you first call `useRemoveFridgeIngredientMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveFridgeIngredientMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeFridgeIngredientMutation, { data, loading, error }] = useRemoveFridgeIngredientMutation({
+ *   variables: {
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function useRemoveFridgeIngredientMutation(baseOptions?: Apollo.MutationHookOptions<RemoveFridgeIngredientMutation, RemoveFridgeIngredientMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RemoveFridgeIngredientMutation, RemoveFridgeIngredientMutationVariables>(RemoveFridgeIngredientDocument, options);
+      }
+export type RemoveFridgeIngredientMutationHookResult = ReturnType<typeof useRemoveFridgeIngredientMutation>;
+export type RemoveFridgeIngredientMutationResult = Apollo.MutationResult<RemoveFridgeIngredientMutation>;
+export type RemoveFridgeIngredientMutationOptions = Apollo.BaseMutationOptions<RemoveFridgeIngredientMutation, RemoveFridgeIngredientMutationVariables>;
 export const AllIngredientsDocument = gql`
     query AllIngredients {
   ingredients {

@@ -1,0 +1,6 @@
+mutation RemoveFridgeIngredient ($name: String!) {
+  removeFridgeIngredient(name: $name) {
+    removed
+    errors
+  }
+}

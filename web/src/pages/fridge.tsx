@@ -1,7 +1,6 @@
-import { Autocomplete, Box, Button, ButtonGroup, Container, Divider, Grid, List, ListItem, ListItemButton, ListItemText, TextField, Toolbar, Typography } from '@mui/material';
+import { Autocomplete, Box, Button, Container, Grid, ListItemText, TextField, Typography } from '@mui/material';
 import { FC, useState } from 'react'
-import Wrapper from '../components/Wrapper';
-import { useAddFridgeIngredientMutation, useAllIngredientsQuery, useFridgeQuery } from '../generated/graphql';
+import { useAddFridgeIngredientMutation, useAllIngredientsQuery, useFridgeQuery, useRemoveFridgeIngredientMutation } from '../generated/graphql';
 import { useRouter } from 'next/router';
 import BackButton from '../components/BackButton';
 import customStyler from '../customStyler';
@@ -18,7 +17,6 @@ interface ingredientOptions {
 const useStyles = customStyler;
 
 const Fridge: FC<fridgeProps> = ({}) => {
-    const [add, { loading: addLoading }] = useAddFridgeIngredientMutation();
     const { data, loading } = useFridgeQuery();
 
     const { data: ingredientList, loading: ingredientLoading} = useAllIngredientsQuery();
@@ -39,6 +37,23 @@ const Fridge: FC<fridgeProps> = ({}) => {
 
     const [orderByIndex, setOrderByIndex] = useState(0);
     const order = ["alphabetical"]
+
+    const [removeMessage, setRemoveMessage] = useState("");
+    const [remove, { loading: removeLoading}] = useRemoveFridgeIngredientMutation();
+    const handleRemove = async (values: { name: string; }) => {
+        const response = await remove({
+            variables: values,
+            // update: (cache, {data}) => {
+            //     cache.modify({
+            //         fields: {
+
+            //         }
+            //     })
+            // }
+        })
+    }
+
+    const [add, { loading: addLoading }] = useAddFridgeIngredientMutation();
 
     const router = useRouter();
 
@@ -97,15 +112,20 @@ const Fridge: FC<fridgeProps> = ({}) => {
                 >
                     {data.fridge.fridgeIngredients.map((ingredient, index) => (
                         <Box key={index} sx={{flexGrow: 1}}>
-                            <Grid container key={index}>
-                                <Grid item xs={3}>
-                                    <Button key={index} sx={{textTransform: "none"}}>
+                            <Grid container key={index} justifyContent="space-between" sx={{mb: 1}}>
+                                <Grid item xs="auto">
+                                    <Button key={index} sx={{textTransform: "none", width: "500px"}} className={classes.gridButton}>
                                         <ListItemText primary={ingredient.name} />
                                     </Button>
                                 </Grid>
-                                <Grid item xs>
-                                    <Button key={index} sx={{textTransform: "none"}}>
-                                        <ListItemText primary={ingredient.name} />
+                                <Grid item xs="auto">
+                                    <Button key={index} sx={{textTransform: "none", width: "100px", ml: "auto"}} className={classes.gridButton}
+                                        onClick={() => handleRemove({name: ingredient.name})}
+                                    >
+                                        <ListItemText primary={"remove"} />
+                                    </Button>
+                                    <Button key={index} sx={{textTransform: "none", width: "100px", ml: 3}} className={classes.gridButton}>
+                                        <ListItemText primary={"edit"} />
                                     </Button>
                                 </Grid>
                             </Grid>

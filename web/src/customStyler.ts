@@ -32,6 +32,13 @@ const customStyler = makeStyles<Theme>((theme: Theme) => ({
         "&:hover .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
         borderColor: theme.palette.primary.dark
         }
+    },
+    gridButton: {
+        backgroundColor: theme.palette.primary.main,
+        color: "white",
+        "&:hover": {
+        backgroundColor: theme.palette.primary.dark
+        }
     }
 }));
 

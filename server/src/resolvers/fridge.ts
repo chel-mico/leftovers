@@ -12,6 +12,14 @@ class FridgeIngredientResponse {
     fridgeIngredient?: FridgeIngredient
 }
 
+@ObjectType()
+class FridgeIngredientRemoveResponse {
+    @Field(() => [String], {nullable: true})
+    errors?: string[]
+    @Field(() => Boolean, {nullable: true})
+    removed?: boolean
+}
+
 @Resolver()
 export class FridgeResolver {
     @Query(() => Fridge, { nullable: true })
@@ -22,6 +30,41 @@ export class FridgeResolver {
             return null;
         }
         return Fridge.findOne(req.session.fridgeId)
+    }
+
+    @Mutation(() => FridgeIngredientRemoveResponse)
+    async removeFridgeIngredient (
+        @Arg("name", () => String) name: string,
+        @Ctx() { req }: Context
+    ): Promise<FridgeIngredientRemoveResponse> {
+        if (!req.session.fridgeId) {
+            return {
+                errors: ["User is not logged in!"],
+                removed: false
+            };
+        }
+
+        const fridge = await Fridge.findOne(req.session.fridgeId)
+        if (!fridge) {
+            return {
+                errors: ["Something went wrong with getting the fridge!"],
+                removed: false
+            };
+        }
+
+        for (const [, element] of fridge.fridgeIngredients.entries()) {
+            if (element.name === name) {
+                await FridgeIngredient.delete(element.id);
+                return {
+                    removed: true
+                }
+            }
+        }
+
+        return {
+            errors: ["Ingredient not found!"],
+            removed: false
+        }
     }
 
     @Mutation(() => FridgeIngredientResponse)

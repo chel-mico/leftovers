@@ -33,7 +33,7 @@ const FridgeBar: FC<FridgeBarProps> = ({}) => {
                     <ListItem key={"You're Not Logged In!"}>
                         <ListItemText primary={"You're Not Logged In!"} />
                     </ListItem>
-                    <ListItem button key={"Log In Here"}>
+                    <ListItem button key={"Log In Here"} onClick={() => router.push("/register")}>
                         <ListItemText primary={"Log In Here"} />
                     </ListItem>
                 </List>
@@ -42,7 +42,7 @@ const FridgeBar: FC<FridgeBarProps> = ({}) => {
                     <ListItem key={"No Account?"}>
                         <ListItemText primary={"No Account?"} />
                     </ListItem>
-                    <ListItem button key={"Register Here"}>
+                    <ListItem button key={"Register Here"} onClick={() => router.push("/register")}>
                         <ListItemText primary={"Register Here"} />
                     </ListItem>
                 </List>

@@ -2,7 +2,7 @@ import { AppBar, Theme, Toolbar, Typography } from '@mui/material'
 import { FC } from 'react';
 import customStyler from '../customStyler';
 import { useMeQuery } from '../generated/graphql';
-import NavBarLink from './NaxBarLink';
+import NavBarLink from './NavBarLink';
 
 interface NavBarProps {
     theme?: Theme

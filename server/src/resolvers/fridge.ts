@@ -95,7 +95,9 @@ export class FridgeResolver {
             };
         }
 
+        
         for (const [, element] of fridge.fridgeIngredients.entries()) {
+            console.log(element.name)
             if (element.name === ingredient.name) {
                 return {
                     errors: ["That ingredient is already in your fridge!"]

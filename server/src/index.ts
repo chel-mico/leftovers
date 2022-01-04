@@ -14,6 +14,7 @@ import {
     ApolloServerPluginLandingPageProductionDefault
 } from "apollo-server-core";
 import { FridgeResolver } from "./resolvers/fridge";
+import { RecipeResolver } from "./resolvers/recipe";
 
 const main = async () => {
     const options = await getConnectionOptions();
@@ -63,7 +64,8 @@ const main = async () => {
             resolvers: [
                 IngredientResolver,
                 UserResolver,
-                FridgeResolver
+                FridgeResolver,
+                RecipeResolver
             ],
             validate: true
         }),

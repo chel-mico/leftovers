@@ -85,7 +85,7 @@ export class FridgeResolver {
             };
         }
 
-        let ingredient = await Ingredient.findOne({
+        const ingredient = await Ingredient.findOne({
             where: [{name}],
             relations: ["fridgeIngredients"]
         })

@@ -23,7 +23,9 @@ export class RecipeIngredient extends BaseEntity {
   @Column()
   ingredientId: string;
   
-  @ManyToOne(() => Ingredient, ingredient => ingredient.recipeIngredients)
+  @ManyToOne(() => Ingredient, ingredient => ingredient.recipeIngredients, {
+    onUpdate: "CASCADE"
+  })
   ingredient: Ingredient;
 
   @Field()

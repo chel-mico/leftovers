@@ -24,20 +24,20 @@ export class Recipe extends BaseEntity {
   @Column()
   authorId: string;
   
-  @Field(() => User, { nullable: true })
+  @Field(() => User)
   @ManyToOne(() => User, author => author.authoredRecipes, {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
   })
   author: User;
 
-  @Field(() => [RecipeIngredient], { nullable: true })
+  @Field(() => [RecipeIngredient])
   @OneToMany(() => RecipeIngredient, ingredient => ingredient.recipe, {
     cascade: true
   })
   recipeIngredients: RecipeIngredient[];
 
-  @Field(() => [RecipeStep], { nullable: true })
+  @Field(() => [RecipeStep])
   @OneToMany(() => RecipeStep, steps => steps.recipe, {
     cascade: true
   })

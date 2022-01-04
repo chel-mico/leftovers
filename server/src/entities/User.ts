@@ -26,14 +26,14 @@ export class User extends BaseEntity {
   @Column()
   fridgeId: string;
 
-  @Field(() => Fridge)
+  @Field(() => Fridge) //make nullable?
   @OneToOne(() => Fridge, fridge => fridge.owner, {
     cascade: true
   })
   @JoinColumn()
   fridge: Fridge;
 
-  @Field(() => [Recipe], { nullable: true })
+  @Field(() => [Recipe])
   @OneToMany(() => Recipe, recipe => recipe.author, {
     cascade: true
   })

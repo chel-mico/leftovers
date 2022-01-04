@@ -55,7 +55,8 @@ export class UserResolver {
 
         input.password = await argon2.hash(input.password);
         const newUser = User.create({
-            ...input
+            ...input,
+            authoredRecipes: []
         });
 
         const fridge = Fridge.create({
@@ -108,7 +109,7 @@ export class UserResolver {
         req.session.fridgeId = user.fridgeId;
 
         return {
-            user: user
+            user
         }
     }
 

@@ -1,4 +1,4 @@
-# CSBless
+# Leftovers
 
 A recipe app to help people waste less food
 

@@ -65,7 +65,7 @@ export class UserResolver {
         });
         newUser.fridge = fridge;
         newUser.fridgeId = fridge.id;
-        await newUser.save();
+        newUser.save();
 
         req.session.userId = newUser.id;
         req.session.fridgeId = fridge.id;

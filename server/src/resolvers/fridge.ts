@@ -54,7 +54,7 @@ export class FridgeResolver {
 
         for (const [, element] of fridge.fridgeIngredients.entries()) {
             if (element.name === name) {
-                await FridgeIngredient.delete(element.id);
+                FridgeIngredient.delete(element.id);
                 return {
                     removed: true
                 }
@@ -116,7 +116,7 @@ export class FridgeResolver {
         fridge.fridgeIngredients.push(newIngredient);
         await fridge.save();
         ingredient.fridgeIngredients.push(newIngredient);
-        await ingredient.save();
+        ingredient.save();
 
         return {
             fridgeIngredient: newIngredient

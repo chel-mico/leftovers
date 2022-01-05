@@ -22,13 +22,17 @@ export class IngredientResolver {
         return Ingredient.find()
     }
 
-    @Query(() => Ingredient, {nullable: true})
+    @Query(() => Ingredient)
     ingredientByName (
         @Arg("name", () => String) name: string
-    ): Promise<Ingredient | undefined> {
-        return Ingredient.findOne({where: [
+    ): Promise<Ingredient | undefined> | null {
+        const ingredient = Ingredient.findOne({where: [
             {name}
         ]});
+        if (!ingredient) {
+            return null
+        }
+        return ingredient
     }
 
     @Mutation(() => IngredientResponse)
@@ -45,12 +49,12 @@ export class IngredientResolver {
             }
         }
 
-        const newIngredient = await Ingredient.create({
+        const newIngredient = Ingredient.create({
             ...input,
             fridgeIngredients: [],
             recipeIngredients: []
-        }).save();
-
+        });
+        newIngredient.save()
         return {
             ingredient: newIngredient
         }

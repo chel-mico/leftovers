@@ -7,6 +7,7 @@ import { User } from "../entities/User";
 import { RecipeIngredient } from "../entities/RecipeIngredient";
 import { RecipeStep } from "../entities/RecipeStep";
 import { Ingredient } from "../entities/Ingredient";
+import { constants } from "../constants";
 
 @ObjectType()
 class RecipeResponse {
@@ -58,8 +59,8 @@ class RecipeStepInput {
     desc: string = "";
     @Field()
     recipeId: string;
-    @Field(() => Int)
-    stepNum: number
+    @Field(() => Int, {nullable: true})
+    stepNum?: number
 }
 
 @Resolver()
@@ -68,6 +69,9 @@ export class RecipeResolver {
     recipe(
         @Arg("id") id: string
     ): Promise<Recipe | undefined> | null {
+        if (!id.match(constants.__uuid__)) {
+            return null
+        }
         const recipe = Recipe.findOne(id, {
             relations: ["recipeIngredients", "steps"]
         })
@@ -155,7 +159,7 @@ export class RecipeResolver {
             steps: []
         });
         user.authoredRecipes.push(recipe)
-        await user.save()
+        user.save()
 
         return {
             recipe
@@ -205,7 +209,7 @@ export class RecipeResolver {
         recipe.recipeIngredients.push(recipeIngredient)
         await recipe.save()
         ingredient.recipeIngredients.push(recipeIngredient)
-        await ingredient.save()
+        ingredient.save()
         return {
             recipeIngredient
         };
@@ -237,7 +241,7 @@ export class RecipeResolver {
 
         for (const [, element] of recipe.recipeIngredients.entries()) {
             if (element.name === input.name) {
-                await RecipeIngredient.delete(element.id);
+                RecipeIngredient.delete(element.id);
                 return {
                     removed: true
                 }
@@ -276,7 +280,8 @@ export class RecipeResolver {
 
         const recipeStep = RecipeStep.create({
             ...input,
-            recipe
+            recipe,
+            stepNum: input.stepNum ? input.stepNum : recipe.steps.length + 1
         })
         recipe.steps.push(recipeStep)
         recipe.save()
@@ -287,7 +292,7 @@ export class RecipeResolver {
 
     @Mutation(() => RecipeRemoveResponse)
     async removeRecipeStep(
-        @Arg("num") input: RecipeStepInput,
+        @Arg("input") input: RecipeStepInput,
         @Ctx() { req }: Context
     ): Promise<RecipeRemoveResponse> {
         if (!req.session.userId) {
@@ -310,17 +315,18 @@ export class RecipeResolver {
         }
 
         let detected = false;
-        for (const [index, element] of recipe.steps.entries()) {
-            if (index === input.stepNum - 1) {
+        for (const [, element] of recipe.steps.entries()) {
+            if (element.stepNum === input.stepNum) {
                 if (!detected) {
-                    await RecipeStep.delete(element.id);
+                    RecipeStep.delete(element.id);
                     detected = true
-                } else {
-                    element.stepNum = element.stepNum - 1
+                    continue
                 }
             }
+            if (detected) {
+                RecipeStep.update(element.id, {stepNum: element.stepNum - 1})
+            }
         }
-        await recipe.save()
 
         if (detected) {
             return {

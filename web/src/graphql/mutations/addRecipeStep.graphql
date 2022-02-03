@@ -1,0 +1,8 @@
+mutation AddRecipeStep ($desc: Stirng!, $recipeId: String!) {
+  addRecipeStep(input: {desc: $desc, recipeId: $recipeId}) {
+    errors
+    recipeStep {
+      desc
+    }
+  }
+}

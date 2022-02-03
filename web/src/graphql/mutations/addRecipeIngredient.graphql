@@ -1,0 +1,9 @@
+mutation AddRecipeIngredient($name: String!, $quantity: Int!, $recipeId: String!) {
+  addRecipeIngredient(input: {name: $name, quantity: $quantity, recipeId: $recipeId}) {
+    errors
+    recipeIngredient {
+      name
+      quantity
+    }
+  }
+}

@@ -1,0 +1,6 @@
+mutation RemoveRecipeStep($stepNum: Int!, $recipeId: String!) {
+  removeRecipeStep(input: {stepNum: $stepNum, recipeId: $recipeId}) {
+    errors
+    removed
+  }
+}

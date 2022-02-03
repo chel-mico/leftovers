@@ -1,0 +1,6 @@
+mutation RemoveRecipeIngredient($name: String!, $recipeId: String!) {
+  removeRecipeIngredient(input: {name: $name, recipeId: $recipeId}) {
+    errors
+    removed
+  }
+}

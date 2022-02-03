@@ -1,0 +1,9 @@
+mutation WriteRecipe($title: String!) {
+  writeRecipe(title: $title) {
+    errors
+    recipe {
+      title
+      id
+    }
+  }
+}

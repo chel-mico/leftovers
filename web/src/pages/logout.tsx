@@ -29,18 +29,16 @@ const Logout: FC<logoutProps> = ({}) => {
     } else if (!data?.me) { //user isn't logged in
         router.push('/');
         body = (
-            <Wrapper>
-                <Typography sx={{
-                    mr: 4,
-                    cursor: "pointer"
-                }}>
-                    You aren&apos;t supposed to be here! \n Redirecting...
-                </Typography>
-            </Wrapper>
+            <Typography sx={{
+                mr: 4,
+                cursor: "pointer"
+            }}>
+                You aren&apos;t supposed to be here! \n Redirecting...
+            </Typography>
         )
     } else {
         body = (
-            <Wrapper>
+            <>
                 <Typography sx={{
                     mr: 4,
                     cursor: "pointer",
@@ -63,14 +61,14 @@ const Logout: FC<logoutProps> = ({}) => {
                     Logout
                 </LoadingButton>
                 <BackButton />
-            </Wrapper>
+            </>
         );
     }
 
     return (
-        <div>
-            {body}
-        </div>
+        <Wrapper>
+            {body!}
+        </Wrapper>
     )
 }
 

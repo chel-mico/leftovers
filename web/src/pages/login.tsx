@@ -115,7 +115,7 @@ const Login: FC<loginProps> = ({}) => {
 
     return (
         <Wrapper>
-            {body}
+            {body!}
         </Wrapper>
     );
 }

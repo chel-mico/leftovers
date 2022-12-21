@@ -63,18 +63,18 @@ const Register: FC<registerProps> = ({}) => {
     } else if (data?.me) { //user is already logged in
         router.push('/');
         body = (
-            <Wrapper>
+            <>
                 <Typography sx={{
                     mr: 4,
                     cursor: "pointer"
                 }}>
                     You aren&apos;t supposed to be here! \n Redirecting...
                 </Typography>
-            </Wrapper>
+            </>
         )
     } else {
         body = (
-            <Wrapper>
+            <>
                 <form onSubmit={formik.handleSubmit}>
                     <TextField
                         fullWidth
@@ -116,14 +116,14 @@ const Register: FC<registerProps> = ({}) => {
                     </LoadingButton>
                     <BackButton />
                 </form>
-            </Wrapper>
+            </>
         )
     }
 
     return (
-        <div>
-            {body}
-        </div>
+        <Wrapper>
+            {body!}
+        </Wrapper>
     );
 }
 

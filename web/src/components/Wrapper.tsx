@@ -4,7 +4,8 @@ import { FC } from 'react'
 
 interface WrapperProps {
     theme?: Theme,
-    width?: string
+    width?: string,
+    children: JSX.Element
 }
 
 const Wrapper: FC<WrapperProps> = ({ 

@@ -25,11 +25,15 @@ export class FridgeResolver {
     @Query(() => Fridge, { nullable: true })
     fridge(
         @Ctx() { req }: Context
-    ): Promise<Fridge | undefined> | null {
+    ): Promise<Fridge | null> | null {
         if (!req.session.fridgeId) {
             return null;
         }
-        return Fridge.findOne(req.session.fridgeId)
+        return Fridge.findOne({
+            where: {
+                id: req.session.fridgeId
+            }
+        })
     }
 
     @Mutation(() => FridgeIngredientRemoveResponse)
@@ -44,7 +48,11 @@ export class FridgeResolver {
             };
         }
 
-        const fridge = await Fridge.findOne(req.session.fridgeId)
+        const fridge = await Fridge.findOne({
+            where: {
+                id: req.session.fridgeId
+            }
+        })
         if (!fridge) {
             return {
                 errors: ["Something went wrong with getting the fridge!"],
@@ -78,7 +86,11 @@ export class FridgeResolver {
             };
         }
 
-        const fridge = await Fridge.findOne(req.session.fridgeId)
+        const fridge = await Fridge.findOne({
+            where: {
+                id: req.session.fridgeId
+            }
+        })
         if (!fridge) {
             return {
                 errors: ["Something went wrong with getting the fridge!"]

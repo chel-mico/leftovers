@@ -25,7 +25,7 @@ export class IngredientResolver {
     @Query(() => Ingredient, {nullable: true})
     ingredientByName (
         @Arg("name", () => String) name: string
-    ): Promise<Ingredient | undefined> {
+    ): Promise<Ingredient | null> {
         return Ingredient.findOne({where: [
             {name}
         ]});

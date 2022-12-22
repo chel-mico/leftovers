@@ -133,17 +133,25 @@ export class UserResolver {
     @Query(() => User)
     userByName (
         @Arg('name', () => String) name: string,
-    ): Promise<User | undefined> {
-        return User.findOne({username: name});
+    ): Promise<User | null> {
+        return User.findOne({
+            where: {
+                username: name
+            }
+        });
     }
 
     @Query(() => User, { nullable: true })
     me (
         @Ctx() { req }: Context,
-    ): Promise<User | undefined> | null {
+    ): Promise<User | null> | null {
         if (!req.session.userId) {
             return null;
         }
-        return User.findOne(req.session.userId);
+        return User.findOne({
+            where: {
+                id: req.session.userId
+            }
+        });
     }
 }

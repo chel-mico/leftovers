@@ -67,9 +67,15 @@ export class RecipeResolver {
     @Query(() => Recipe, { nullable: true })
     recipe(
         @Arg("id") id: string
-    ): Promise<Recipe | undefined> | null {
-        const recipe = Recipe.findOne(id, {
-            relations: ["recipeIngredients", "steps"]
+    ): Promise<Recipe | null> | null {
+        const recipe = Recipe.findOne({
+            where: {
+                id: id
+            },
+            relations: {
+                recipeIngredients: true,
+                steps: true
+            }
         })
         if (!recipe) {
             return null
@@ -92,7 +98,11 @@ export class RecipeResolver {
             }];
         }
 
-        const fridge = await Fridge.findOne(req.session.fridgeId)
+        const fridge = await Fridge.findOne({
+            where: {
+                id: req.session.fridgeId
+            }
+        })
         if (!fridge) {
             return [{
                 errors: ["Something went wrong with getting the fridge!"]
@@ -141,7 +151,14 @@ export class RecipeResolver {
             }
         }
         
-        const user = await User.findOne(req.session.userId, {relations: ["authoredRecipes"]})
+        const user = await User.findOne({
+            where: {
+                id: req.session.userId
+            },
+            relations: {
+                authoredRecipes: true
+            }
+        })
         if (!user) {
             return {
                 errors: ["There was a problem with getting the user"]
